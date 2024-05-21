@@ -1,5 +1,5 @@
 #pragma once
-#include "include.h"
+#include <SFML/Graphics.hpp>
 
 class GraphicalObject: public sf::Sprite
 {
@@ -14,7 +14,5 @@ public:
 	GraphicalObject(sf::Texture t, sf::Vector2f p);
 	GraphicalObject(sf::Texture t, sf::Vector2f p, sf::IntRect f);
 	~GraphicalObject();
-
-	void repeat(sf::IntRect frame);
 };
 

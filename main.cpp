@@ -1,4 +1,7 @@
-#include "include.h"
+#include "Classes.h"
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <iostream>
 
 int main() {
     // create the window
@@ -18,15 +21,6 @@ int main() {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
-
-
-
-
-
-
-
-
 
 
         window.clear();

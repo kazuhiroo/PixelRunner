@@ -29,7 +29,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include.h">
+    <ClInclude Include="Classes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AnimatedObject.h">

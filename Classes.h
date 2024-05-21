@@ -1,8 +1,4 @@
 #pragma once
-//custom libraries
-#include <iostream>
-#include <vector>
-
 //SFML
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
