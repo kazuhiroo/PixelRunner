@@ -1,11 +1,15 @@
 #include "AnimatedObject.h"
 
-
+//contructors
 AnimatedObject::AnimatedObject(sf::Texture t, sf::Vector2f p, int af) : position(p), texture(t) {
 	this->setTexture(texture);
 	this->setPosition(position);
 }
+AnimatedObject::~AnimatedObject() {
 
+}
+
+//animation methods
 void AnimatedObject::add_animation_frame(sf::IntRect frame) {
 	frames.emplace_back(frame);
 	std::cout << "added_anim_frame\n";

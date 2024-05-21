@@ -14,8 +14,11 @@ private:
 	sf::Vector2f position;
 
 public:
+	//constructors
 	AnimatedObject(sf::Texture t, sf::Vector2f p, int af);
-
+	~AnimatedObject();
+	
+	//animation methods
 	void add_animation_frame(sf::IntRect frame);
 	void animate(sf::Time& time_elapsed);
 
