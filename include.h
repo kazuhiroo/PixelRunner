@@ -9,3 +9,4 @@
 //my headers
 #include "GraphicalObject.h"
 #include "AnimatedObject.h"
+#include "Hero.h"

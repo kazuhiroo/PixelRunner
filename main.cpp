@@ -6,6 +6,8 @@ int main() {
 
     sf::Clock clock;
 
+
+    //game loop
     while (window.isOpen()) {
 
         sf::Event event;

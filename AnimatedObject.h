@@ -2,11 +2,11 @@
 #include "include.h"
 class AnimatedObject: public sf::Sprite
 {
-private:
+protected:
 	//animation
 	std::vector<sf::IntRect> frames;
 	int animated_frame = 0;
-	int animated_fps;
+	int animation_fps;
 	sf::Time object_time;
 
 	//variables for initializing
@@ -15,12 +15,12 @@ private:
 
 public:
 	//constructors
-	AnimatedObject(sf::Texture t, sf::Vector2f p, int af);
+	AnimatedObject(sf::Texture t, sf::Vector2f p);
 	~AnimatedObject();
 	
 	//animation methods
 	void add_animation_frame(sf::IntRect frame);
 	void animate(sf::Time& time_elapsed);
-
+	void set_animation_fps(int af);
 };
 

@@ -1,7 +1,7 @@
 #include "AnimatedObject.h"
 
 //contructors
-AnimatedObject::AnimatedObject(sf::Texture t, sf::Vector2f p, int af) : position(p), texture(t) {
+AnimatedObject::AnimatedObject(sf::Texture t, sf::Vector2f p): position(p), texture(t) {
 	this->setTexture(texture);
 	this->setPosition(position);
 }
@@ -24,4 +24,7 @@ void AnimatedObject::animate(sf::Time& time_elapsed) {
         this->setTextureRect(frames[animated_frame]);
         object_time = sf::Time::Zero;
     }
+}
+void AnimatedObject::set_animation_fps(int af) {
+    animation_fps = af;
 }
