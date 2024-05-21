@@ -5,7 +5,10 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(1366, 768), "My window");
 
     sf::Clock clock;
+    sf::Texture sky_texture;
+    sky_texture.loadFromFile("sky.png");
 
+    GraphicalObject sky(sky_texture, sf::Vector2f(0.0,0.0), sf::IntRect(0,0,1366, 100));
 
     //game loop
     while (window.isOpen()) {
@@ -26,7 +29,9 @@ int main() {
 
 
 
-        window.clear(sf::Color::Black);
+        window.clear();
+
+        window.draw(sky);
 
         window.display();
 

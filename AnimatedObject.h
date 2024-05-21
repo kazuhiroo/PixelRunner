@@ -1,5 +1,8 @@
 #pragma once
-#include "include.h"
+#include <SFML/Graphics.hpp>
+#include <iostream>
+#include <vector>
+
 class AnimatedObject: public sf::Sprite
 {
 protected:
@@ -15,12 +18,11 @@ protected:
 
 public:
 	//constructors
-	AnimatedObject(sf::Texture t, sf::Vector2f p);
+	AnimatedObject(sf::Texture t, sf::Vector2f p, int af);
 	~AnimatedObject();
 	
 	//animation methods
 	void add_animation_frame(sf::IntRect frame);
 	void animate(sf::Time& time_elapsed);
-	void set_animation_fps(int af);
 };
 

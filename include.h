@@ -8,5 +8,4 @@
 #include <SFML/Graphics.hpp>
 //my headers
 #include "GraphicalObject.h"
-#include "AnimatedObject.h"
-#include "Hero.h"
+#include "Hero.h" //+AnimatedObject

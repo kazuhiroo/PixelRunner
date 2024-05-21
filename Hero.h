@@ -1,10 +1,11 @@
 #pragma once
-#include "include.h"
+#include "AnimatedObject.h"
 
 enum class Action {
 	stable,
 	in_air
 };
+
 
 class Hero: public AnimatedObject
 {
@@ -22,7 +23,7 @@ private:
 
 public:
 	//contructors
-	Hero(sf::Texture t, sf::Vector2f p);
+	Hero(sf::Texture t, sf::Vector2f p, int af);
 	~Hero();
 };
 

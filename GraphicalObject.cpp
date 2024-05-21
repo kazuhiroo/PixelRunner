@@ -6,6 +6,14 @@ GraphicalObject::GraphicalObject(sf::Texture t, sf::Vector2f p) : texture(t), po
 	this->setPosition(position);
 }
 
+GraphicalObject::GraphicalObject(sf::Texture t, sf::Vector2f p, sf::IntRect f) : texture(t), position(p), frame(f) {
+	this->texture.setRepeated(true);
+	this->setTexture(texture);
+	this->setTextureRect(frame);
+	this->setPosition(position);
+}
+
 GraphicalObject::~GraphicalObject() {
 
 }
+
