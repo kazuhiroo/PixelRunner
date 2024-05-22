@@ -48,3 +48,8 @@ void Hero::movement(sf::Time& elapsed_time) {
 
     this->setPosition(position);
 }
+
+
+void Hero::collision(std::vector<Platform>& platforms) {
+
+}
