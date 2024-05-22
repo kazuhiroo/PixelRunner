@@ -11,12 +11,12 @@ Hero::~Hero() {
 
 //movement methods
 void Hero::gravity(sf::Time& elapsed_time) {
-    if (state == Action::in_air) {
+    if (state == State::in_air) {
         jump_velocity += g * elapsed_time.asSeconds();
 
         position.y += jump_velocity * elapsed_time.asSeconds();
     }
-    else if (state == Action::stable) {
+    else if (state == State::stable) {
         jump_velocity = 0;
     }
 }
@@ -29,9 +29,9 @@ void Hero::movement(sf::Time& elapsed_time) {
 
     //jump
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        if (state == Action::stable) {
+        if (state == State::stable) {
             jump_velocity = -sqrt(2 * g * jump_height);
-            state = Action::in_air;
+            state = State::in_air;
 
             position.y -= jump_velocity * elapsed_time.asSeconds();
         }
@@ -48,7 +48,7 @@ void Hero::movement(sf::Time& elapsed_time) {
 
     //down
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        if (state == Action::stable) {
+        if (state == State::stable) {
             position.y += horizontal_velocity * elapsed_time.asSeconds();
         }
     }
@@ -66,18 +66,15 @@ void Hero::collision(std::vector<Platform>& platforms) {
             this->getPosition().x <= e.getPosition().x + e.getGlobalBounds().width &&
             jump_velocity >= 0) {
            
-            state = Action::stable;
+            state = State::stable;
             return;
         }
         else {
-            state = Action::in_air;
+            state = State::in_air;
         }
     }
 }
 
 
-void Hero::attack() {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 
-    }
-}
+   

@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedObject.cpp" />
+    <ClCompile Include="Arrow.cpp" />
     <ClCompile Include="GraphicalObject.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="main.cpp" />
@@ -141,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedObject.h" />
+    <ClInclude Include="Arrow.h" />
     <ClInclude Include="GraphicalObject.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Classes.h" />

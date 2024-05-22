@@ -1,8 +1,9 @@
 #pragma once
 #include "AnimatedObject.h"
 #include "Platform.h"
+#include "Arrow.h"
 
-enum class Action {
+enum class State {
 	stable,
 	in_air
 };
@@ -22,7 +23,7 @@ private:
 	const float g = 981.0;
 
 	//state
-	Action state = Action::stable;
+	State state = State::stable;
 
 public:
 	//contructors
@@ -36,6 +37,5 @@ public:
 	//collision
 	void collision(std::vector<Platform> &platforms);
 
-	void attack();
 };
 
