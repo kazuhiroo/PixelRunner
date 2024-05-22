@@ -17,7 +17,7 @@ int main() {
     GraphicalObject sky(sky_texture, sf::Vector2f(0.0,0.0), sf::IntRect(0,0,1366, 768));
     sky.setScale(1,2.5);
 
-    //Create prototype platforms
+    //create prototype platforms
     std::vector<Platform> platforms;
 
     sf::Texture platform_texture;
@@ -60,8 +60,6 @@ int main() {
         hero.animate(elapsed_time);
         hero.movement(elapsed_time);
       
-
-
 
 
         //render

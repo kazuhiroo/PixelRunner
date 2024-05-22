@@ -26,6 +26,7 @@ void Hero::movement(sf::Time& elapsed_time) {
     //gravitation
     this->gravity(elapsed_time);
     std::cout <<jump_velocity <<"\n";
+   // 
     //jump
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         if (state == Action::stable) {
@@ -56,11 +57,13 @@ void Hero::collision(std::vector<Platform>& platforms) {
             this->getPosition().y + this->getGlobalBounds().height <= e.getPosition().y + e.getGlobalBounds().height &&
             this->getPosition().x + this->getGlobalBounds().width >= e.getPosition().x &&
             this->getPosition().x <= e.getPosition().x + e.getGlobalBounds().width &&
-            jump_velocity > 0) {
-            jump_velocity = 0;
-            this->setPosition(this->getPosition().x, e.getPosition().y - this->getGlobalBounds().height);
+            jump_velocity >= 0) {
+           
             state = Action::stable;
-            break;
+            return;
+        }
+        else {
+            state = Action::in_air;
         }
     }
 }
