@@ -6,8 +6,12 @@
 int main() {
     // create the window
     sf::RenderWindow window(sf::VideoMode(1366, 768), "My window");
+    window.setFramerateLimit(60);
 
+    //time
     sf::Clock clock;
+
+    //create sky object
     sf::Texture sky_texture;
     sky_texture.loadFromFile("sky.png");
 
@@ -15,14 +19,14 @@ int main() {
 
     //game loop
     while (window.isOpen()) {
-
+        //polling
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
 
-
+        //render
         window.clear();
 
         window.draw(sky);

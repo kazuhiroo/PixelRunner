@@ -13,9 +13,9 @@ private:
 
 	//movement variables
 	float jump_height = 100.0;
-	float velocity_jump = 0;
+	float jump_velocity = 0;
 
-	const float velocity_vertical = 200.0;
+	const float vertical_velocity = 200.0;
 	const float g = 981.0;
 
 	//state
@@ -25,5 +25,10 @@ public:
 	//contructors
 	Hero(sf::Texture t, sf::Vector2f p, int af);
 	~Hero();
+
+	//movement methods
+	void movement(sf::Time &elapsed_time);
+	void gravity(sf::Time &elapsed_time);
+
 };
 
