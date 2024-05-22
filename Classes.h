@@ -3,5 +3,5 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 //my headers
-#include "GraphicalObject.h"
+#include "Platform.h"//+GraphicalObject
 #include "Hero.h" //+AnimatedObject
