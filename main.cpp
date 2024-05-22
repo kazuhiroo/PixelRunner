@@ -22,18 +22,30 @@ int main() {
 
     sf::Texture platform_texture;
     platform_texture.loadFromFile("platform.png");
-    Platform platform1(platform_texture, sf::Vector2f(100.0,600.0));
+    Platform platform1(platform_texture, sf::Vector2f(150.0,300.0));
     platform1.setScale(0.5, 0.3);
     platforms.emplace_back(platform1);
 
-    Platform platform2(platform_texture, sf::Vector2f(400.0, 600.0));
+    Platform platform2(platform_texture, sf::Vector2f(100.0, 600.0));
     platform2.setScale(0.5, 0.3);
     platforms.emplace_back(platform2);
+
+
+
+    Platform platform3(platform_texture, sf::Vector2f(200.0, 500.0));
+    platform3.setScale(0.5, 0.3);
+    platforms.emplace_back(platform3);
+
+
+    Platform platform4(platform_texture, sf::Vector2f(400.0, 400.0));
+    platform4.setScale(0.5, 0.3);
+    platforms.emplace_back(platform4);
+
 
     //Create hero object
     sf::Texture hero_texture;
     hero_texture.loadFromFile("character.png");
-    Hero hero(hero_texture,sf::Vector2f(100.0, 400.0),9);
+    Hero hero(hero_texture,sf::Vector2f(100.0, 200.0),9);
     hero.setScale(2, 2);
 
     hero.add_animation_frame(sf::IntRect(200, 0, 37, 37)); // 1 frame of animation

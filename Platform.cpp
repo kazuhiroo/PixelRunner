@@ -8,3 +8,10 @@ Platform::Platform(sf::Texture t, sf::Vector2f p) : GraphicalObject(t, p) {
 Platform::~Platform() {
 
 }
+
+
+void Platform::movement(sf::Time& elapsed_time) {
+
+	position.x += vertical_velocity * elapsed_time.asSeconds();
+	this->setPosition(position);
+}

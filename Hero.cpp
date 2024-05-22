@@ -26,7 +26,7 @@ void Hero::movement(sf::Time& elapsed_time) {
     //gravitation
     this->gravity(elapsed_time);
     std::cout <<jump_velocity <<"\n";
-   // 
+
     //jump
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         if (state == Action::stable) {
@@ -38,15 +38,22 @@ void Hero::movement(sf::Time& elapsed_time) {
     }
 
     //moving left-right
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         position.x -= vertical_velocity * elapsed_time.asSeconds();
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         position.x += vertical_velocity * elapsed_time.asSeconds();
     }
 
+    //down
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        if (state == Action::stable) {
+            position.y += horizontal_velocity * elapsed_time.asSeconds();
+        }
+    }
 
+    //setting new position
     this->setPosition(position);
 }
 
@@ -65,5 +72,12 @@ void Hero::collision(std::vector<Platform>& platforms) {
         else {
             state = Action::in_air;
         }
+    }
+}
+
+
+void Hero::attack() {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+
     }
 }

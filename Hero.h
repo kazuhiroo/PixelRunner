@@ -13,9 +13,11 @@ class Hero: public AnimatedObject
 private:
 
 	//movement variables
-	float jump_height = 100.0;
+	
 	float jump_velocity = 0;
 
+	const float jump_height = 100.0;
+	const float horizontal_velocity = 1000.0;
 	const float vertical_velocity = 200.0;
 	const float g = 981.0;
 
@@ -33,5 +35,7 @@ public:
 
 	//collision
 	void collision(std::vector<Platform> &platforms);
+
+	void attack();
 };
 
