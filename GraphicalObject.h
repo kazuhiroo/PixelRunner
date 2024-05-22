@@ -3,7 +3,7 @@
 
 class GraphicalObject: public sf::Sprite
 {
-private:
+protected:
 
 	//variables for initializing
 	sf::Texture texture;
