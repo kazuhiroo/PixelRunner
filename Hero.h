@@ -5,7 +5,10 @@
 
 enum class State {
 	stable,
-	in_air
+	in_air,
+	slide,
+	attacking,
+	passive
 };
 
 
@@ -18,12 +21,13 @@ private:
 	float jump_velocity = 0;
 
 	const float jump_height = 100.0;
-	const float horizontal_velocity = 1000.0;
+	const float horizontal_velocity = 800.0;
 	const float vertical_velocity = 200.0;
 	const float g = 981.0;
 
 	//state
 	State state = State::stable;
+	State attitude = State::passive;
 
 public:
 	//contructors
@@ -33,7 +37,7 @@ public:
 	//movement methods
 	void movement(sf::Time &elapsed_time);
 	void gravity(sf::Time &elapsed_time);
-
+	void attack();
 	//collision
 	void collision(std::vector<Platform> &platforms);
 

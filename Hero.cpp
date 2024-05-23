@@ -3,6 +3,7 @@
 Hero::Hero(sf::Texture t, sf::Vector2f p, int af): AnimatedObject(t,p,af){
 	this->setTexture(texture);
 	this->setPosition(position);
+    //this->setOrigin(this->getGlobalBounds().width/2, this->getGlobalBounds().height / 2);
 }
 
 Hero::~Hero() {
@@ -37,7 +38,7 @@ void Hero::movement(sf::Time& elapsed_time) {
         }
     }
 
-    //moving left-right
+    //left-right
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         position.x -= vertical_velocity * elapsed_time.asSeconds();
     }
@@ -48,9 +49,11 @@ void Hero::movement(sf::Time& elapsed_time) {
 
     //down
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        
         if (state == State::stable) {
             position.y += horizontal_velocity * elapsed_time.asSeconds();
         }
+        
     }
 
     //setting new position
@@ -75,6 +78,10 @@ void Hero::collision(std::vector<Platform>& platforms) {
     }
 }
 
-
+void Hero::attack() {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && attitude == State::passive) {
+        attitude == State::attacking;
+    }
+}
 
    
