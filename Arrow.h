@@ -11,6 +11,7 @@ public:
 	Arrow(sf::Texture t, sf::Vector2f p);
 	~Arrow();
 
+	//movement
 	void movement(sf::Time& elapsed_time);
 };
 

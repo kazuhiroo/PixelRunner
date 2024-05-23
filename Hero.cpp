@@ -3,7 +3,6 @@
 Hero::Hero(sf::Texture t, sf::Vector2f p, int af): AnimatedObject(t,p,af){
 	this->setTexture(texture);
 	this->setPosition(position);
-    //this->setOrigin(this->getGlobalBounds().width/2, this->getGlobalBounds().height / 2);
 }
 
 Hero::~Hero() {
@@ -79,9 +78,27 @@ void Hero::collision(std::vector<Platform>& platforms) {
 }
 
 void Hero::attack() {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && attitude == State::passive) {
-        attitude == State::attacking;
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && attitude == State::passive && attack_time.asSeconds() >= 2.0) {
+        std::cout << "you are attacking\n";
+        this->attitude == State::attacking;
+        this->attack_time = sf::Time::Zero;
     }
 }
 
-   
+
+
+void Hero::update(sf::Time& elapsed_time, std::vector<Platform>& platforms) {
+
+    attack_time += elapsed_time;
+    if (attack_time.asSeconds() >= 2.0 && attitude == State::attacking) {
+        std::cout << "you are passive\n";
+        this->attitude = State::passive;
+    }
+
+
+    this->movement(elapsed_time);
+    this->collision(platforms);
+    this->attack();
+
+
+}

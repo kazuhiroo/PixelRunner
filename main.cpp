@@ -3,6 +3,13 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 
+struct Set {
+    //struct for gamesets
+};
+
+
+
+
 int main() {
     // create the window
     sf::RenderWindow window(sf::VideoMode(1366, 768), "My window");

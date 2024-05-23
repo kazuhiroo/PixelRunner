@@ -15,6 +15,8 @@ enum class State {
 class Hero: public AnimatedObject
 {
 private:
+	//attacking 
+	sf::Time attack_time;
 
 	//movement variables
 	
@@ -40,6 +42,10 @@ public:
 	void attack();
 	//collision
 	void collision(std::vector<Platform> &platforms);
+
+
+	//update
+	void update(sf::Time &elapsed_time, std::vector<Platform> &platforms);
 
 };
 
