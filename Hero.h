@@ -39,7 +39,7 @@ public:
 	//movement methods
 	void movement(sf::Time &elapsed_time);
 	void gravity(sf::Time &elapsed_time);
-	void attack();
+	void attack(sf::Time& elapsed_time);
 	//collision
 	void collision(std::vector<Platform> &platforms);
 

@@ -25,7 +25,7 @@ void Hero::gravity(sf::Time& elapsed_time) {
 void Hero::movement(sf::Time& elapsed_time) {
     //gravitation
     this->gravity(elapsed_time);
-    std::cout <<jump_velocity <<"\n";
+    //std::cout <<jump_velocity <<"\n";
 
     //jump
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
@@ -77,10 +77,13 @@ void Hero::collision(std::vector<Platform>& platforms) {
     }
 }
 
-void Hero::attack() {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && attitude == State::passive && attack_time.asSeconds() >= 1.0) {
+void Hero::attack(sf::Time &elapsed_time) {
+   
+    this->attack_time += elapsed_time;
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && attitude == State::passive && attack_time.asSeconds() >= 1.0) {
         std::cout << "you are attacking\n";
-        this->attitude == State::attacking;
+        this->attitude = State::attacking;
         this->attack_time = sf::Time::Zero;
     }
 }
@@ -89,8 +92,7 @@ void Hero::attack() {
 
 void Hero::update(sf::Time& elapsed_time, std::vector<Platform>& platforms) {
 
-    attack_time += elapsed_time;
-    if (attack_time.asSeconds() >= 0.5 && attitude == State::attacking) {
+    if (attack_time.asSeconds() >= 2.0 && attitude == State::attacking) {
         std::cout << "you are passive\n";
         this->attitude = State::passive;
     }
@@ -98,7 +100,7 @@ void Hero::update(sf::Time& elapsed_time, std::vector<Platform>& platforms) {
     this->animate(elapsed_time);
     this->movement(elapsed_time);
     this->collision(platforms);
-    this->attack();
+    this->attack(elapsed_time);
 
 
 }
