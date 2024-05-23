@@ -75,11 +75,11 @@ int main() {
 
 
         //hero methods
-        hero.collision(platforms);
+       /* hero.collision(platforms);
         hero.animate(elapsed_time);
-        hero.movement(elapsed_time);
+        hero.movement(elapsed_time);*/
       
-
+        hero.update(elapsed_time, platforms);
 
         //render
         window.clear();

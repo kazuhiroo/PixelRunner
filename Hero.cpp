@@ -63,9 +63,9 @@ void Hero::movement(sf::Time& elapsed_time) {
 void Hero::collision(std::vector<Platform>& platforms) {
     for (auto& e : platforms) {
         if (this->getPosition().y + this->getGlobalBounds().height >= e.getPosition().y &&
-            this->getPosition().y + this->getGlobalBounds().height <= e.getPosition().y + e.getGlobalBounds().height &&
-            this->getPosition().x + this->getGlobalBounds().width >= e.getPosition().x &&
-            this->getPosition().x <= e.getPosition().x + e.getGlobalBounds().width &&
+            this->getPosition().y + this->getGlobalBounds().height <= e.getPosition().y + e.getGlobalBounds().height / 2 &&
+            this->getPosition().x + this->getGlobalBounds().width > e.getPosition().x &&
+            this->getPosition().x < e.getPosition().x + e.getGlobalBounds().width &&
             jump_velocity >= 0) {
            
             state = State::stable;
@@ -78,7 +78,7 @@ void Hero::collision(std::vector<Platform>& platforms) {
 }
 
 void Hero::attack() {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && attitude == State::passive && attack_time.asSeconds() >= 2.0) {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && attitude == State::passive && attack_time.asSeconds() >= 1.0) {
         std::cout << "you are attacking\n";
         this->attitude == State::attacking;
         this->attack_time = sf::Time::Zero;
@@ -90,12 +90,12 @@ void Hero::attack() {
 void Hero::update(sf::Time& elapsed_time, std::vector<Platform>& platforms) {
 
     attack_time += elapsed_time;
-    if (attack_time.asSeconds() >= 2.0 && attitude == State::attacking) {
+    if (attack_time.asSeconds() >= 0.5 && attitude == State::attacking) {
         std::cout << "you are passive\n";
         this->attitude = State::passive;
     }
 
-
+    this->animate(elapsed_time);
     this->movement(elapsed_time);
     this->collision(platforms);
     this->attack();
