@@ -55,10 +55,10 @@ int main() {
     Hero hero(hero_texture,sf::Vector2f(100.0, 200.0),9);
     hero.setScale(2, 2);
 
-    hero.add_animation_frame(sf::IntRect(200, 0, 37, 37)); // 1 frame of animation
-    hero.add_animation_frame(sf::IntRect(250, 0, 37, 37)); // 2 frame
-    hero.add_animation_frame(sf::IntRect(300, 0, 37, 37)); // 3 frame
-    hero.add_animation_frame(sf::IntRect(350, 0, 37, 37)); // 4 frame
+    hero.add_animation_frame(sf::IntRect(213, 0, 23, 37)); // 1 frame of animation
+    hero.add_animation_frame(sf::IntRect(263, 0, 23, 37)); // 2 frame
+    hero.add_animation_frame(sf::IntRect(313, 0, 23, 37)); // 3 frame
+    hero.add_animation_frame(sf::IntRect(363, 0, 23, 37)); // 4 frame
 
 
     //game loop
