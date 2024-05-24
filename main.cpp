@@ -5,10 +5,32 @@
 
 struct Set {
     //struct for gamesets
+    std::vector<Platform> platforms;
+    sf::Texture platform_texture;
+
+    void set_texture() {
+        if (!platform_texture.loadFromFile("platform.png")) {
+            std::cerr << "Error loading platform.png\n";
+        }
+    }
+    void setset() {
+        Platform platform1(platform_texture, sf::Vector2f(100.0, 600.0));
+        platform1.setScale(0.5, 0.3);
+        platforms.emplace_back(platform1);
+
+        Platform platform2(platform_texture, sf::Vector2f(300.0, 550.0));
+        platform2.setScale(0.5, 0.3);
+        platforms.emplace_back(platform2);
+
+        Platform platform3(platform_texture, sf::Vector2f(500.0, 500.0));
+        platform3.setScale(0.5, 0.3);
+        platforms.emplace_back(platform3);
+
+        Platform platform4(platform_texture, sf::Vector2f(700.0, 450.0));
+        platform4.setScale(0.5, 0.3);
+        platforms.emplace_back(platform4);
+    }
 };
-
-
-
 
 int main() {
     // create the window
@@ -20,39 +42,22 @@ int main() {
 
     //create sky object
     sf::Texture sky_texture;
-    sky_texture.loadFromFile("sky.png");
-    GraphicalObject sky(sky_texture, sf::Vector2f(0.0,0.0), sf::IntRect(0,0,1366, 768));
-    sky.setScale(1,2.5);
+    if (!sky_texture.loadFromFile("sky.png")) {
+        std::cerr << "Error loading sky.png\n";
+    }
+    GraphicalObject sky(sky_texture, sf::Vector2f(0.0, 0.0), sf::IntRect(0, 0, 1366, 768));
+    sky.setScale(1, 2.5);
 
-    //create prototype platforms
-    std::vector<Platform> platforms;
-
-    sf::Texture platform_texture;
-    platform_texture.loadFromFile("platform.png");
-    Platform platform1(platform_texture, sf::Vector2f(150.0,300.0));
-    platform1.setScale(0.5, 0.3);
-    platforms.emplace_back(platform1);
-
-    Platform platform2(platform_texture, sf::Vector2f(100.0, 600.0));
-    platform2.setScale(0.5, 0.3);
-    platforms.emplace_back(platform2);
-
-
-
-    Platform platform3(platform_texture, sf::Vector2f(200.0, 500.0));
-    platform3.setScale(0.5, 0.3);
-    platforms.emplace_back(platform3);
-
-
-    Platform platform4(platform_texture, sf::Vector2f(400.0, 400.0));
-    platform4.setScale(0.5, 0.3);
-    platforms.emplace_back(platform4);
-
+    Set set;
+    set.set_texture();
+    set.setset();
 
     //Create hero object
     sf::Texture hero_texture;
-    hero_texture.loadFromFile("character.png");
-    Hero hero(hero_texture,sf::Vector2f(100.0, 200.0),9);
+    if (!hero_texture.loadFromFile("character.png")) {
+        std::cerr << "Error loading character.png\n";
+    }
+    Hero hero(hero_texture, sf::Vector2f(100.0, 200.0), 9);
     hero.setScale(2, 2);
 
     hero.add_animation_frame(sf::IntRect(213, 0, 23, 37)); // 1 frame of animation
@@ -60,12 +65,11 @@ int main() {
     hero.add_animation_frame(sf::IntRect(313, 0, 23, 37)); // 3 frame
     hero.add_animation_frame(sf::IntRect(363, 0, 23, 37)); // 4 frame
 
-
     //game loop
     while (window.isOpen()) {
         // Restart the clock to get elapsed time since the last restart
-        sf::Time elapsed_time = clock.restart();        
-        
+        sf::Time elapsed_time = clock.restart();
+
         //polling
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -73,30 +77,25 @@ int main() {
                 window.close();
         }
 
-
         //hero methods
-       /* hero.collision(platforms);
-        hero.animate(elapsed_time);
-        hero.movement(elapsed_time);*/
-      
-        hero.update(elapsed_time, platforms);
+        hero.update(elapsed_time, set.platforms);
+
+        //platform methods
+        for (auto& e : set.platforms) {
+            e.setTexture(set.platform_texture);
+            e.movement(elapsed_time);
+        }
 
         //render
         window.clear();
-
         window.draw(sky);
-        for (auto& e : platforms) {
+        for (const auto& e : set.platforms) {
+            std::cout << "Platform position: " << e.getPosition().x << ", " << e.getPosition().y << std::endl;
             window.draw(e);
         }
-        
         window.draw(hero);
         window.display();
-
-
-       
-        //std::cout << elapsed.asSeconds() << "\n"; // Print elapsed time in seconds
     }
-
 
     return 0;
 }
