@@ -13,24 +13,35 @@ struct Set {
             std::cerr << "Error loading platform.png\n";
         }
     }
-    void setset() {
-        Platform platform1(platform_texture, sf::Vector2f(100.0, 600.0));
-        platform1.setScale(0.5, 0.3);
-        platforms.emplace_back(platform1);
-
-        Platform platform2(platform_texture, sf::Vector2f(300.0, 550.0));
-        platform2.setScale(0.5, 0.3);
-        platforms.emplace_back(platform2);
-
-        Platform platform3(platform_texture, sf::Vector2f(500.0, 500.0));
-        platform3.setScale(0.5, 0.3);
-        platforms.emplace_back(platform3);
-
-        Platform platform4(platform_texture, sf::Vector2f(700.0, 450.0));
-        platform4.setScale(0.5, 0.3);
-        platforms.emplace_back(platform4);
-    }
 };
+
+
+Set create_set_1() {
+    Set set;
+    set.set_texture();
+
+    Platform platform1(set.platform_texture, sf::Vector2f(100.0, 600.0));
+    platform1.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform1);
+
+    Platform platform2(set.platform_texture, sf::Vector2f(300.0, 550.0));
+    platform2.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform2);
+
+    Platform platform3(set.platform_texture, sf::Vector2f(500.0, 500.0));
+    platform3.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform3);
+
+    Platform platform4(set.platform_texture, sf::Vector2f(700.0, 450.0));
+    platform4.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform4);
+
+
+    return set;
+}
+
+
+
 
 int main() {
     // create the window
@@ -48,9 +59,8 @@ int main() {
     GraphicalObject sky(sky_texture, sf::Vector2f(0.0, 0.0), sf::IntRect(0, 0, 1366, 768));
     sky.setScale(1, 2.5);
 
-    Set set;
-    set.set_texture();
-    set.setset();
+    Set set_1 = create_set_1();
+
 
     //Create hero object
     sf::Texture hero_texture;
@@ -78,7 +88,7 @@ int main() {
         }
 
         //hero methods
-        hero.update(elapsed_time, set.platforms);
+        hero.update(elapsed_time, set_1.platforms);
 
         //platform methods
         for (auto& e : set.platforms) {
@@ -89,8 +99,7 @@ int main() {
         //render
         window.clear();
         window.draw(sky);
-        for (const auto& e : set.platforms) {
-            std::cout << "Platform position: " << e.getPosition().x << ", " << e.getPosition().y << std::endl;
+        for (const auto& e : set_1.platforms) {
             window.draw(e);
         }
         window.draw(hero);
