@@ -8,6 +8,8 @@ struct Set {
     std::vector<Platform> platforms;
     sf::Texture platform_texture;
 
+
+    //setting texture method
     void set_texture() {
         if (!platform_texture.loadFromFile("platform.png")) {
             std::cerr << "Error loading platform.png\n";
@@ -39,8 +41,6 @@ Set create_set_1() {
 
     return set;
 }
-
-
 
 
 int main() {
