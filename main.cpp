@@ -91,8 +91,8 @@ int main() {
         hero.update(elapsed_time, set_1.platforms);
 
         //platform methods
-        for (auto& e : set.platforms) {
-            e.setTexture(set.platform_texture);
+        for (auto& e : set_1.platforms) {
+            e.setTexture(set_1.platform_texture);
             e.movement(elapsed_time);
         }
 
