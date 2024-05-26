@@ -252,8 +252,15 @@ int main() {
         //polling
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
                 window.close();
+            }
+                
+            if (event.type == sf::Event::KeyPressed) {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+                    window.close();
+                }
+            }
         }
 
       
@@ -270,8 +277,6 @@ int main() {
         hero.movement(elapsed_time);
         hero.update(elapsed_time, sets);
         
-
-
         //render
         window.clear();
         window.draw(sky);
