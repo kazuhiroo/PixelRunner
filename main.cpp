@@ -3,7 +3,7 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 
-
+//creating sets methods
 Set create_set_1() {
     Set set;
     set.set_texture();
@@ -149,14 +149,12 @@ Set create_set_6() {
 }
 
 
-
+//spawn - clear mechanism
 void spawn_set(std::vector<Set>& sets) {
     int set_choice;
 
     Set& last_set = sets.back();
     Platform& last_platform = last_set.platforms.back();
-
-
 
     if (last_platform.getPosition().x + last_platform.getGlobalBounds().width <= 1350) {
         set_choice = rand() % 6;
@@ -206,7 +204,7 @@ void clear_set(std::vector<Set>& sets) {
     }
 }
 
-
+//main
 int main() {
     // create the window
     sf::RenderWindow window(sf::VideoMode(1366, 768), "My window");

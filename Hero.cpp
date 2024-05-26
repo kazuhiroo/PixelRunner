@@ -21,7 +21,6 @@ void Hero::gravity(sf::Time& elapsed_time) {
     }
 }
 
-
 void Hero::movement(sf::Time& elapsed_time) {
     //gravitation
     this->gravity(elapsed_time);
@@ -63,7 +62,6 @@ void Hero::movement(sf::Time& elapsed_time) {
     this->setPosition(position);
 }
 
-
 void Hero::collision(std::vector<Set> &sets) {
     bool detected = false;
 
@@ -101,8 +99,6 @@ void Hero::attack(sf::Time &elapsed_time) {
         this->attack_time = sf::Time::Zero;
     }
 }
-
-
 
 void Hero::update(sf::Time& elapsed_time, std::vector<Set>& sets) {
 
