@@ -3,6 +3,7 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 
+
 struct Set {
     //struct for gamesets
     std::vector<Platform> platforms;
@@ -15,6 +16,13 @@ struct Set {
             std::cerr << "Error loading platform.png\n";
         }
     }
+
+    void update(sf::Time &elapsed_time) {
+        for (auto& e : platforms) {
+            e.setTexture(platform_texture);
+            e.movement(elapsed_time);
+        }
+    }
 };
 
 
@@ -22,25 +30,202 @@ Set create_set_1() {
     Set set;
     set.set_texture();
 
-    Platform platform1(set.platform_texture, sf::Vector2f(100.0, 600.0));
+    Platform platform1(set.platform_texture, sf::Vector2f(1366.0, 600.0));
     platform1.setScale(0.5, 0.3);
     set.platforms.emplace_back(platform1);
 
-    Platform platform2(set.platform_texture, sf::Vector2f(300.0, 550.0));
+    Platform platform2(set.platform_texture, sf::Vector2f(1366+200.0, 550.0));
     platform2.setScale(0.5, 0.3);
     set.platforms.emplace_back(platform2);
 
-    Platform platform3(set.platform_texture, sf::Vector2f(500.0, 500.0));
+    Platform platform3(set.platform_texture, sf::Vector2f(1366+400.0, 500.0));
     platform3.setScale(0.5, 0.3);
     set.platforms.emplace_back(platform3);
 
-    Platform platform4(set.platform_texture, sf::Vector2f(700.0, 450.0));
+    Platform platform4(set.platform_texture, sf::Vector2f(1366+600.0, 450.0));
     platform4.setScale(0.5, 0.3);
     set.platforms.emplace_back(platform4);
 
 
     return set;
 }
+
+Set create_set_2() {
+    Set set;
+    set.set_texture();
+
+    Platform platform1(set.platform_texture, sf::Vector2f(1366.0, 600.0));
+    platform1.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform1);
+
+    Platform platform2(set.platform_texture, sf::Vector2f(1366 + 200.0, 550.0));
+    platform2.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform2);
+
+    Platform platform3(set.platform_texture, sf::Vector2f(1366 + 400.0, 500.0));
+    platform3.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform3);
+
+    Platform platform4(set.platform_texture, sf::Vector2f(1366 + 600.0, 450.0));
+    platform4.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform4);
+
+
+    return set;
+}
+
+Set create_set_3() {
+    Set set;
+    set.set_texture();
+
+    Platform platform1(set.platform_texture, sf::Vector2f(1366.0, 600.0));
+    platform1.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform1);
+
+    Platform platform2(set.platform_texture, sf::Vector2f(1366 + 200.0, 550.0));
+    platform2.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform2);
+
+    Platform platform3(set.platform_texture, sf::Vector2f(1366 + 400.0, 500.0));
+    platform3.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform3);
+
+    Platform platform4(set.platform_texture, sf::Vector2f(1366 + 600.0, 450.0));
+    platform4.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform4);
+
+
+    return set;
+}
+
+Set create_set_4() {
+    Set set;
+    set.set_texture();
+
+    Platform platform1(set.platform_texture, sf::Vector2f(1366.0, 600.0));
+    platform1.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform1);
+
+    Platform platform2(set.platform_texture, sf::Vector2f(1366 + 200.0, 550.0));
+    platform2.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform2);
+
+    Platform platform3(set.platform_texture, sf::Vector2f(1366 + 400.0, 500.0));
+    platform3.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform3);
+
+    Platform platform4(set.platform_texture, sf::Vector2f(1366 + 600.0, 450.0));
+    platform4.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform4);
+
+
+    return set;
+}
+
+Set create_set_5() {
+    Set set;
+    set.set_texture();
+
+    Platform platform1(set.platform_texture, sf::Vector2f(1366.0, 600.0));
+    platform1.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform1);
+
+    Platform platform2(set.platform_texture, sf::Vector2f(1366 + 200.0, 550.0));
+    platform2.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform2);
+
+    Platform platform3(set.platform_texture, sf::Vector2f(1366 + 400.0, 500.0));
+    platform3.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform3);
+
+    Platform platform4(set.platform_texture, sf::Vector2f(1366 + 600.0, 450.0));
+    platform4.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform4);
+
+
+    return set;
+}
+
+Set create_set_6() {
+    Set set;
+    set.set_texture();
+
+    Platform platform1(set.platform_texture, sf::Vector2f(1366.0, 600.0));
+    platform1.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform1);
+
+    Platform platform2(set.platform_texture, sf::Vector2f(1366 + 200.0, 550.0));
+    platform2.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform2);
+
+    Platform platform3(set.platform_texture, sf::Vector2f(1366 + 400.0, 500.0));
+    platform3.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform3);
+
+    Platform platform4(set.platform_texture, sf::Vector2f(1366 + 600.0, 450.0));
+    platform4.setScale(0.5, 0.3);
+    set.platforms.emplace_back(platform4);
+
+
+    return set;
+}
+
+void spawn_set(std::vector<Set> &sets) {
+    int set_choice;
+
+    const Set& last_set = sets.back();
+    const Platform& last_platform = last_set.platforms.back();
+
+
+
+    if (last_platform.getPosition().x + last_platform.getGlobalBounds().width <= 1200) {
+        set_choice = rand() % 6;
+        Set set;
+        switch(set_choice)
+        {
+        case 0:
+            set = create_set_1();
+            sets.emplace_back(set);
+            break;
+        case 1:
+            set = create_set_2();
+            sets.emplace_back(set);
+            break;
+        case 2:
+            set = create_set_3();
+            sets.emplace_back(set);
+            break;
+        case 3:
+            set = create_set_4();
+            sets.emplace_back(set);
+            break;
+        case 4:
+            set = create_set_5();
+            sets.emplace_back(set);
+            break;
+        case 5:
+            set = create_set_6();
+            sets.emplace_back(set);
+            break;
+        default:
+            break;
+        }
+    }
+
+
+}
+
+void clear_set(std::vector<Set> sets) {
+    
+    Set& first_set = sets.front();
+    Platform& last_platform = first_set.platforms.back();
+
+    if (last_platform.getPosition().x +
+        last_platform.getGlobalBounds().width <= 0) {
+        sets.erase(sets.begin());
+        }
+}
+
 
 
 int main() {
@@ -56,12 +241,24 @@ int main() {
     if (!sky_texture.loadFromFile("sky.png")) {
         std::cerr << "Error loading sky.png\n";
     }
+
     GraphicalObject sky(sky_texture, sf::Vector2f(0.0, 0.0), sf::IntRect(0, 0, 1366, 768));
     sky.setScale(1, 2.5);
 
+    
+
+
+    std::vector<Set> sets;
+
     Set set_1 = create_set_1();
+    sets.emplace_back(set_1);
 
-
+    Set set_2 = create_set_1();
+    sets.emplace_back(set_2);
+    
+    Platform ground(set_1.platform_texture, sf::Vector2f(-200.0,550.0));
+    ground.setScale(100.0,1.0);
+    
     //Create hero object
     sf::Texture hero_texture;
     if (!hero_texture.loadFromFile("character.png")) {
@@ -77,7 +274,7 @@ int main() {
 
     //game loop
     while (window.isOpen()) {
-        // Restart the clock to get elapsed time since the last restart
+        // restart the clock to get elapsed time since the last restart
         sf::Time elapsed_time = clock.restart();
 
         //polling
@@ -88,21 +285,30 @@ int main() {
         }
 
         //hero methods
-        hero.update(elapsed_time, set_1.platforms);
+        hero.movement(elapsed_time);
+
+        for (auto& set : sets) {
+            hero.update(elapsed_time, set.platforms);
+        }
 
         //platform methods
-        for (auto& e : set_1.platforms) {
-            e.setTexture(set_1.platform_texture);
-            e.movement(elapsed_time);
+        for (auto& set : sets) {
+            set.update(elapsed_time);
         }
 
         //render
         window.clear();
         window.draw(sky);
-        for (const auto& e : set_1.platforms) {
-            window.draw(e);
+        window.draw(ground);
+
+        for (const auto& set : sets) {
+            for (const auto& platform : set.platforms) {
+                window.draw(platform);
+            }
         }
+
         window.draw(hero);
+
         window.display();
     }
 

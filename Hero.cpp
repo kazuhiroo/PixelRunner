@@ -98,7 +98,7 @@ void Hero::update(sf::Time& elapsed_time, std::vector<Platform>& platforms) {
     }
 
     this->animate(elapsed_time);
-    this->movement(elapsed_time);
+   // this->movement(elapsed_time);
     this->collision(platforms);
     this->attack(elapsed_time);
 
