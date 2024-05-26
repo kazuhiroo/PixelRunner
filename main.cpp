@@ -296,6 +296,10 @@ int main() {
             set.update(elapsed_time);
         }
 
+        spawn_set(sets);
+        clear_set(sets);
+
+
         //render
         window.clear();
         window.draw(sky);
