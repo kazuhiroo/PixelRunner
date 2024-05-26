@@ -1,7 +1,6 @@
 #pragma once
 #include "AnimatedObject.h"
 #include "Platform.h"
-#include "Arrow.h"
 
 enum class State {
 	stable,
@@ -10,6 +9,28 @@ enum class State {
 	attacking,
 	passive
 };
+
+struct Set {
+    //struct for gamesets
+    std::vector<Platform> platforms;
+    sf::Texture platform_texture;
+
+
+    //setting texture method
+    void set_texture() {
+        if (!platform_texture.loadFromFile("platform.png")) {
+            std::cerr << "Error loading platform.png\n";
+        }
+    }
+
+    void update(sf::Time& elapsed_time) {
+        for (auto& e : platforms) {
+            e.setTexture(platform_texture);
+            e.movement(elapsed_time);
+        }
+    }
+};
+
 
 
 class Hero: public AnimatedObject
@@ -24,7 +45,8 @@ private:
 
 	const float jump_height = 100.0;
 	const float horizontal_velocity = 800.0;
-	const float vertical_velocity = 200.0;
+	const float vertical_velocity = 150.0;
+	const float state_velocity = 100;
 	const float g = 981.0;
 
 	//state
@@ -41,11 +63,10 @@ public:
 	void gravity(sf::Time &elapsed_time);
 	void attack(sf::Time& elapsed_time);
 	//collision
-	void collision(std::vector<Platform> &platforms);
+	void collision(std::vector<Set> &sets);
 
 
 	//update
-	void update(sf::Time &elapsed_time, std::vector<Platform> &platforms);
+	void update(sf::Time &elapsed_time, std::vector<Set> &sets);
 
 };
-

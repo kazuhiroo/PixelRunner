@@ -1,5 +1,6 @@
 #include "Hero.h"
 
+
 Hero::Hero(sf::Texture t, sf::Vector2f p, int af): AnimatedObject(t,p,af){
 	this->setTexture(texture);
 	this->setPosition(position);
@@ -13,7 +14,6 @@ Hero::~Hero() {
 void Hero::gravity(sf::Time& elapsed_time) {
     if (state == State::in_air) {
         jump_velocity += g * elapsed_time.asSeconds();
-
         position.y += jump_velocity * elapsed_time.asSeconds();
     }
     else if (state == State::stable) {
@@ -28,7 +28,7 @@ void Hero::movement(sf::Time& elapsed_time) {
     //std::cout <<jump_velocity <<"\n";
 
     //jump
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         if (state == State::stable) {
             jump_velocity = -sqrt(2 * g * jump_height);
             state = State::in_air;
@@ -55,26 +55,40 @@ void Hero::movement(sf::Time& elapsed_time) {
         
     }
 
+    if (state == State::stable) {
+        position.x -= state_velocity * elapsed_time.asSeconds();
+    }
+
     //setting new position
     this->setPosition(position);
 }
 
 
-void Hero::collision(std::vector<Platform>& platforms) {
-    for (auto& e : platforms) {
-        if (this->getPosition().y + this->getGlobalBounds().height >= e.getPosition().y &&
-            this->getPosition().y + this->getGlobalBounds().height <= e.getPosition().y + e.getGlobalBounds().height / 2 &&
-            this->getPosition().x + this->getGlobalBounds().width > e.getPosition().x &&
-            this->getPosition().x < e.getPosition().x + e.getGlobalBounds().width &&
-            jump_velocity >= 0) {
-           
-            state = State::stable;
-            return;
+void Hero::collision(std::vector<Set> &sets) {
+    bool detected = false;
+
+    for (auto& set : sets) {
+        for (auto& e : set.platforms) {
+            if (this->getPosition().y + this->getGlobalBounds().height >= e.getPosition().y &&
+                this->getPosition().y + this->getGlobalBounds().height <= e.getPosition().y + e.getGlobalBounds().height / 2 &&
+                this->getPosition().x + this->getGlobalBounds().width > e.getPosition().x &&
+                this->getPosition().x < e.getPosition().x + e.getGlobalBounds().width &&
+                jump_velocity >= 0) {
+
+                std::cout << "Collision detected at platform: " << e.getPosition().x << ", " << e.getPosition().y << "\n";
+                detected = true;
+                state = State::stable;
+                break;
+            }
+            else {
+                state = State::in_air;
+            }
         }
-        else {
-            state = State::in_air;
+        if (detected) {
+            break;
         }
     }
+    
 }
 
 void Hero::attack(sf::Time &elapsed_time) {
@@ -90,7 +104,7 @@ void Hero::attack(sf::Time &elapsed_time) {
 
 
 
-void Hero::update(sf::Time& elapsed_time, std::vector<Platform>& platforms) {
+void Hero::update(sf::Time& elapsed_time, std::vector<Set>& sets) {
 
     if (attack_time.asSeconds() >= 2.0 && attitude == State::attacking) {
         std::cout << "you are passive\n";
@@ -98,7 +112,7 @@ void Hero::update(sf::Time& elapsed_time, std::vector<Platform>& platforms) {
     }
 
     this->animate(elapsed_time);
-    this->collision(platforms);
+    this->collision(sets);
     this->attack(elapsed_time);
 
 }
