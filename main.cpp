@@ -4,9 +4,18 @@
 #include <iostream>
 
 //creating sets methods
+Set create_starting_set() {
+    Set set;
+
+    //will add a set for starting game
+
+
+    return set;
+}
+
 Set create_set_1() {
     Set set;
-    set.set_texture();
+    set.platform_texture.loadFromFile("platform.png");
 
     Platform platform1(set.platform_texture, sf::Vector2f(200.0, 600.0));
     platform1.setScale(0.5, 0.3);
@@ -30,7 +39,7 @@ Set create_set_1() {
 
 Set create_set_2() {
     Set set;
-    set.set_texture();
+    set.platform_texture.loadFromFile("platform.png");
 
     Platform platform1(set.platform_texture, sf::Vector2f(1366.0, 600.0));
     platform1.setScale(0.5, 0.3);
@@ -54,7 +63,7 @@ Set create_set_2() {
 
 Set create_set_3() {
     Set set;
-    set.set_texture();
+    set.platform_texture.loadFromFile("platform.png");
 
     Platform platform1(set.platform_texture, sf::Vector2f(1366.0, 600.0));
     platform1.setScale(0.5, 0.3);
@@ -78,7 +87,7 @@ Set create_set_3() {
 
 Set create_set_4() {
     Set set;
-    set.set_texture();
+    set.platform_texture.loadFromFile("platform.png");
 
     Platform platform1(set.platform_texture, sf::Vector2f(1366.0, 600.0));
     platform1.setScale(0.5, 0.3);
@@ -102,7 +111,7 @@ Set create_set_4() {
 
 Set create_set_5() {
     Set set;
-    set.set_texture();
+    set.platform_texture.loadFromFile("platform.png");
 
     Platform platform1(set.platform_texture, sf::Vector2f(1366.0, 600.0));
     platform1.setScale(0.5, 0.3);
@@ -126,7 +135,7 @@ Set create_set_5() {
 
 Set create_set_6() {
     Set set;
-    set.set_texture();
+    set.platform_texture.loadFromFile("platform.png");
 
     Platform platform1(set.platform_texture, sf::Vector2f(1366.0, 600.0));
     platform1.setScale(0.5, 0.3);
@@ -228,8 +237,6 @@ int main() {
     Set set_1 = create_set_1();
     sets.emplace_back(set_1);
     
-    /*Platform ground(set_1.platform_texture, sf::Vector2f(-200.0,550.0));
-    ground.setScale(100.0,1.0);*/
     
     //Create hero object
     sf::Texture hero_texture;

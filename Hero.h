@@ -15,22 +15,12 @@ struct Set {
     std::vector<Platform> platforms;
     sf::Texture platform_texture;
 
-
-    //setting texture method
-    void set_texture() {
-        if (!platform_texture.loadFromFile("platform.png")) {
-            std::cerr << "Error loading platform.png\n";
-        }
-    }
-
     void update(sf::Time& elapsed_time) {
         for (auto& e : platforms) {
-            e.setTexture(platform_texture);
             e.movement(elapsed_time);
         }
     }
 };
-
 
 
 class Hero: public AnimatedObject

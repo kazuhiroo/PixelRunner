@@ -89,6 +89,7 @@ void Hero::collision(std::vector<Set> &sets) {
     
 }
 
+//attacking
 void Hero::attack(sf::Time &elapsed_time) {
    
     this->attack_time += elapsed_time;
@@ -100,6 +101,7 @@ void Hero::attack(sf::Time &elapsed_time) {
     }
 }
 
+//udpate method
 void Hero::update(sf::Time& elapsed_time, std::vector<Set>& sets) {
 
     if (attack_time.asSeconds() >= 2.0 && attitude == State::attacking) {
