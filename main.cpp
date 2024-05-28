@@ -240,9 +240,19 @@ int main() {
     sets.emplace_back(starting_set);
     
     //create enemy (just for trying if it works)
+    sf::Texture enemy_texture;
+    enemy_texture.loadFromFile("enemy.png");
+    Enemy enemy(enemy_texture, sf::Vector2f(window.getSize().x/2,window.getSize().y/2), 9);
+    enemy.setScale(2, 2);
+
+
+    enemy.add_animation_frame(sf::IntRect(213, 0, 23, 37)); // 1 frame of animation
+    enemy.add_animation_frame(sf::IntRect(263, 0, 23, 37)); // 2 frame
+    enemy.add_animation_frame(sf::IntRect(313, 0, 23, 37)); // 3 frame
+    enemy.add_animation_frame(sf::IntRect(363, 0, 23, 37)); // 4 frame
+    
     
 
-    
     //create hero object
     sf::Texture hero_texture;
     if (!hero_texture.loadFromFile("character.png")) {
@@ -277,7 +287,8 @@ int main() {
 
         //enemy
         
-
+        
+        enemy.update(elapsed_time);
 
         //platform methods
         for (auto& set : sets) {
@@ -301,7 +312,9 @@ int main() {
                 window.draw(platform);
             }
         }
+        enemy.render_arrows(window);
 
+        window.draw(enemy);
         window.draw(hero);
 
         window.display();

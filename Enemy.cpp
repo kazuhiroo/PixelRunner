@@ -27,6 +27,10 @@ void Enemy::shooting(sf::Time& elapsed_time) {
 		shoot_time = sf::Time::Zero;
 	}
 
+	for (auto& arrow : arrows) {
+		arrow->movement(elapsed_time);
+	}
+
 }
 
 void Enemy::render_arrows(sf::RenderWindow &window){
