@@ -3,6 +3,38 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 
+//creating basic game objects
+
+Hero create_hero() {
+    //create hero object
+    sf::Texture hero_texture;
+    if (!hero_texture.loadFromFile("character.png")) {
+        std::cerr << "Error loading character.png\n";
+    }
+
+    Hero hero(hero_texture, sf::Vector2f(200.0, 200.0), 9);
+    hero.setScale(2, 2);
+
+    hero.add_animation_frame(sf::IntRect(213, 0, 23, 37)); // 1 frame of animation
+    hero.add_animation_frame(sf::IntRect(263, 0, 23, 37)); // 2 frame
+    hero.add_animation_frame(sf::IntRect(313, 0, 23, 37)); // 3 frame
+    hero.add_animation_frame(sf::IntRect(363, 0, 23, 37)); // 4 frame
+
+    return hero;
+}
+
+GraphicalObject create_sky() {
+    sf::Texture sky_texture;
+    if (!sky_texture.loadFromFile("sky.png")) {
+        std::cerr << "Error loading sky.png\n";
+    }
+
+    GraphicalObject sky(sky_texture, sf::Vector2f(0.0, 0.0), sf::IntRect(0, 0, 1366, 768));
+    sky.setScale(1, 2.5);
+
+    return sky;
+}
+
 //creating sets methods
 Set create_starting_set() {
     Set set;
@@ -28,7 +60,6 @@ Set create_set_1() {
     return set;
 }
 
-
 Set create_set_2() {
     Set set;
     sf::Texture big_platform_texture;
@@ -44,9 +75,8 @@ Set create_set_2() {
 }
 
 
-
 //spawn - clear mechanism
-void spawn_set(std::vector<Set>& sets, sf::Texture &platform_texture) {
+void spawn_set(std::vector<Set>& sets) {
     int set_choice;
 
     Set& last_set = sets.back();
@@ -71,8 +101,6 @@ void spawn_set(std::vector<Set>& sets, sf::Texture &platform_texture) {
             break;
         }
     }
-
-
 }
 
 void clear_set(std::vector<Set>& sets) {
@@ -126,36 +154,19 @@ void end_game(bool& end) {
 
 //main
 int main() {
-
+    //game variables
     bool end = false;
-
-
-
-    //create the window
-    sf::RenderWindow window(sf::VideoMode(1366, 768), "My window");
-    window.setFramerateLimit(60);
-
-    //time
     sf::Clock clock;
 
+    //create the window
+    sf::RenderWindow window(sf::VideoMode(1366, 768), "PixelRunner");
+    window.setFramerateLimit(60);
+
     //create sky object
-    sf::Texture sky_texture;
-    if (!sky_texture.loadFromFile("sky.png")) {
-        std::cerr << "Error loading sky.png\n";
-    }
-
-    GraphicalObject sky(sky_texture, sf::Vector2f(0.0, 0.0), sf::IntRect(0, 0, 1366, 768));
-    sky.setScale(1, 2.5);
-    //plat
-
-    sf::Texture platform_texture;
-    if (!platform_texture.loadFromFile("platform.png")) {
-        std::cerr << "Error loading p.png\n";
-    }
+    GraphicalObject sky = create_sky();
 
     //create sets objects
     std::vector<Set> sets;
-
     Set starting_set = create_starting_set();
     sets.emplace_back(starting_set);
     
@@ -171,21 +182,9 @@ int main() {
     enemy.add_animation_frame(sf::IntRect(313, 0, 23, 37)); // 3 frame
     enemy.add_animation_frame(sf::IntRect(363, 0, 23, 37)); // 4 frame
     
+    //create hero
+    Hero hero = create_hero();
     
-
-    //create hero object
-    sf::Texture hero_texture;
-    if (!hero_texture.loadFromFile("character.png")) {
-        std::cerr << "Error loading character.png\n";
-    }
-
-    Hero hero(hero_texture, sf::Vector2f(200.0, 200.0), 9);
-    hero.setScale(2, 2);
-
-    hero.add_animation_frame(sf::IntRect(213, 0, 23, 37)); // 1 frame of animation
-    hero.add_animation_frame(sf::IntRect(263, 0, 23, 37)); // 2 frame
-    hero.add_animation_frame(sf::IntRect(313, 0, 23, 37)); // 3 frame
-    hero.add_animation_frame(sf::IntRect(363, 0, 23, 37)); // 4 frame
 
     //game loop
     while (window.isOpen()) {
@@ -213,7 +212,7 @@ int main() {
             set.update(elapsed_time);
         }
 
-        spawn_set(sets, platform_texture);
+        spawn_set(sets);
         clear_set(sets);
 
         //hero methods
