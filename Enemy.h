@@ -6,8 +6,8 @@ class Enemy: public AnimatedObject
 {
 private:
 	//variables for an attack
-	std::vector<std::unique_ptr<Arrow>> arrows;
-	sf::Time shoot_time;
+	//std::vector<std::unique_ptr<Arrow>> arrows;
+	//sf::Time shoot_time;
 
 public:
 	//constructor

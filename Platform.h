@@ -7,7 +7,7 @@ private:
 	float vertical_velocity = 100.0;
 
 public:
-	Platform(const sf::Texture& t, sf::Vector2f p);
+	Platform(sf::Texture& t, sf::Vector2f p);
 	~Platform();
 
 	void movement(sf::Time& elapsed_time);

@@ -73,7 +73,7 @@ void Hero::collision(std::vector<Set> &sets) {
                 this->getPosition().x < e.getPosition().x + e.getGlobalBounds().width &&
                 jump_velocity >= 0) {
 
-                std::cout << "Collision detected at platform: " << e.getPosition().x << ", " << e.getPosition().y << "\n";
+               // std::cout << "Collision detected at platform: " << e.getPosition().x << ", " << e.getPosition().y << "\n";
                 detected = true;
                 state = State::stable;
                 break;

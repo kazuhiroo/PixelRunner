@@ -1,6 +1,6 @@
 #include "Platform.h"
 
-Platform::Platform(const sf::Texture &t, sf::Vector2f p) : GraphicalObject(t, p) {
+Platform::Platform(sf::Texture &t, sf::Vector2f p) : GraphicalObject(t, p) {
 	this->setTexture(texture);
 	this->setPosition(position);
 }

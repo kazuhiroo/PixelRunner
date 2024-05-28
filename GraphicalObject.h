@@ -11,7 +11,7 @@ protected:
 	sf::IntRect frame;
 public:
 	//constructors
-	GraphicalObject(sf::Texture t, sf::Vector2f p);
+	GraphicalObject(const sf::Texture &t, sf::Vector2f p);
 	GraphicalObject(sf::Texture t, sf::Vector2f p, sf::IntRect f);
 	~GraphicalObject();
 };

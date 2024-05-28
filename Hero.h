@@ -13,11 +13,28 @@ enum class State {
 struct Set {
     //struct for gamesets
     std::vector<Platform> platforms;
-    sf::Texture platform_texture;
+	std::vector<sf::Texture> platform_textures;
+	//enemies
+	//bonuses
+
+	void add_platform(sf::Texture& texture, const sf::Vector2f& position, const sf::Vector2f& scale = { 0.5f, 0.3f }) {
+		
+		platform_textures.push_back(texture);
+		platforms.emplace_back(texture, position);
+		platforms.back().setScale(scale);
+	}
+
+
+	void init() {
+		for (int i = 0; i < platforms.size(); i++)
+			platforms[i].setTexture(platform_textures[i]);
+	}
+
 
     void update(sf::Time& elapsed_time) {
-        for (auto& e : platforms) {
-            e.movement(elapsed_time);
+		init();
+        for (auto& platform : platforms) {
+            platform.movement(elapsed_time);
         }
     }
 };
