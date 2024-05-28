@@ -1,4 +1,5 @@
 #include "Hero.h"
+#include "Enemy.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <iostream>
@@ -215,7 +216,7 @@ void clear_set(std::vector<Set>& sets) {
 
 //main
 int main() {
-    // create the window
+    //create the window
     sf::RenderWindow window(sf::VideoMode(1366, 768), "My window");
     window.setFramerateLimit(60);
 
@@ -232,13 +233,17 @@ int main() {
     sky.setScale(1, 2.5);
 
 
+    //create sets objects
     std::vector<Set> sets;
 
-    Set set_1 = create_set_1();
-    sets.emplace_back(set_1);
+    Set starting_set = create_set_1();
+    sets.emplace_back(starting_set);
     
+    //create enemy (just for trying if it works)
     
-    //Create hero object
+
+    
+    //create hero object
     sf::Texture hero_texture;
     if (!hero_texture.loadFromFile("character.png")) {
         std::cerr << "Error loading character.png\n";
@@ -270,7 +275,9 @@ int main() {
             }
         }
 
-      
+        //enemy
+        
+
 
         //platform methods
         for (auto& set : sets) {
