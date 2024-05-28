@@ -101,7 +101,8 @@ bool over_borderline(Hero &hero, sf::RenderWindow &window) {
 bool lost_fight(Hero &hero, std::vector<Set>& sets) {
     for (auto& set : sets) {
         for (auto& enemy : set.enemies) {
-            if (hero.getGlobalBounds().intersects(enemy.getGlobalBounds())) {
+            if (hero.getGlobalBounds().intersects(enemy.getGlobalBounds()) && 
+                hero.get_attitude() == State::passive) {
                 return true;
             }
             else {
