@@ -6,9 +6,10 @@
 //creating sets methods
 Set create_starting_set() {
     Set set;
+    sf::Texture platform_texture;
+    platform_texture.loadFromFile("starting_platform.png");
 
-    //will add a set for starting game
-
+    set.add_platform(platform_texture, sf::Vector2f(0.0, 600.0));
 
     return set;
 }
@@ -18,10 +19,10 @@ Set create_set_1() {
     sf::Texture platform_texture;
     platform_texture.loadFromFile("platform.png");
 
-    set.add_platform(platform_texture, sf::Vector2f(200.0, 600.0), sf::Vector2f(0.5f, 0.3f));
-    set.add_platform(platform_texture, sf::Vector2f(400.0, 550.0), sf::Vector2f(0.5f, 0.3f));
-    set.add_platform(platform_texture, sf::Vector2f(600.0, 500.0), sf::Vector2f(0.5f, 0.3f));
-    set.add_platform(platform_texture, sf::Vector2f(800.0, 450.0), sf::Vector2f(0.5f, 0.3f));
+    set.add_platform(platform_texture, sf::Vector2f(1366, 600.0), sf::Vector2f(0.5f, 0.3f));
+    set.add_platform(platform_texture, sf::Vector2f(1366 + 200.0, 550.0), sf::Vector2f(0.5f, 0.3f));
+    set.add_platform(platform_texture, sf::Vector2f(1366 + 400.0, 500.0), sf::Vector2f(0.5f, 0.3f));
+    set.add_platform(platform_texture, sf::Vector2f(1366 + 600.0, 450.0), sf::Vector2f(0.5f, 0.3f));
    
     
     return set;
@@ -59,7 +60,7 @@ void spawn_set(std::vector<Set>& sets, sf::Texture &platform_texture) {
         switch (set_choice)
         {
         case 0:
-            set = create_set_2();
+            set = create_set_1();
             sets.emplace_back(set);
             break;
         case 1:
@@ -88,35 +89,48 @@ void clear_set(std::vector<Set>& sets) {
 
 //game functions
 
-bool over_borderline(Hero &hero, sf::RenderWindow &window) {
+void over_borderline(Hero &hero, sf::RenderWindow &window, bool &end) {
    
     if (hero.getPosition().x <= 0 || hero.getPosition().y >= window.getSize().y) {
-        return true;
-    }
-    else {
-        return false;
+        end = true;
     }
 }
 
-bool lost_fight(Hero &hero, std::vector<Set>& sets) {
+void fight(Hero &hero, std::vector<Set>& sets, bool &end) {
     for (auto& set : sets) {
-        for (auto& enemy : set.enemies) {
-            if (hero.getGlobalBounds().intersects(enemy.getGlobalBounds()) && 
-                hero.get_attitude() == State::passive) {
-                return true;
+        for (auto it = set.enemies.begin(); it != set.enemies.end();) {
+            if (hero.getGlobalBounds().intersects(it->getGlobalBounds())) {
+                if (hero.get_attitude() == State::passive) {
+                    end = true;
+                    break;
+                }
+                else if (hero.get_attitude() == State::attacking) {
+                    it = set.enemies.erase(it);
+                    continue;
+                }
             }
-            else {
-                return false;
-            }
+            
+            it++;
+            
         }
     }
 }
 
 
-
+void end_game(bool& end) {
+    if (end) {
+        //sleep cout END - POINTS
+        //window.close();
+    }
+}
 
 //main
 int main() {
+
+    bool end = false;
+
+
+
     //create the window
     sf::RenderWindow window(sf::VideoMode(1366, 768), "My window");
     window.setFramerateLimit(60);
@@ -142,7 +156,7 @@ int main() {
     //create sets objects
     std::vector<Set> sets;
 
-    Set starting_set = create_set_1();
+    Set starting_set = create_starting_set();
     sets.emplace_back(starting_set);
     
     //create enemy (just for trying if it works)
@@ -165,7 +179,7 @@ int main() {
         std::cerr << "Error loading character.png\n";
     }
 
-    Hero hero(hero_texture, sf::Vector2f(1350.0, 200.0), 9);
+    Hero hero(hero_texture, sf::Vector2f(200.0, 200.0), 9);
     hero.setScale(2, 2);
 
     hero.add_animation_frame(sf::IntRect(213, 0, 23, 37)); // 1 frame of animation
