@@ -145,10 +145,10 @@ void fight(Hero &hero, std::vector<Set>& sets, bool &end) {
 }
 
 
-void end_game(bool& end) {
+void end_game(bool& end, sf::RenderWindow &window) {
     if (end) {
         //sleep cout END - POINTS
-        //window.close();
+        window.close();
     }
 }
 
@@ -204,7 +204,8 @@ int main() {
                 }
             }
         }
-
+        over_borderline(hero, window, end);
+        end_game(end,window);
   
 
         //platform methods
