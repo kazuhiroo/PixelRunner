@@ -1,6 +1,7 @@
 #pragma once
 #include "AnimatedObject.h"
 #include "Platform.h"
+#include "Enemy.h"
 
 enum class State {
 	stable,
@@ -14,10 +15,10 @@ struct Set {
     //struct for gamesets
     std::vector<Platform> platforms;
 	std::vector<sf::Texture> platform_textures;
-	//enemies
+	std::vector<Enemy> enemies;
 	//bonuses
 
-	void add_platform(sf::Texture& texture, const sf::Vector2f& position, const sf::Vector2f& scale = { 0.5f, 0.3f }) {
+	void add_platform(sf::Texture& texture, const sf::Vector2f& position, const sf::Vector2f& scale = { 1.0f, 1.0f }) {
 		
 		platform_textures.push_back(texture);
 		platforms.emplace_back(texture, position);
@@ -72,7 +73,10 @@ public:
 	//collision
 	void collision(std::vector<Set> &sets);
 
-
+	//info methods
+	State get_attitude() {
+		return attitude;
+	}
 	//update
 	void update(sf::Time &elapsed_time, std::vector<Set> &sets);
 

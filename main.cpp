@@ -1,5 +1,4 @@
 #include "Hero.h"
-#include "Enemy.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <iostream>
@@ -23,9 +22,9 @@ Set create_set_1() {
     set.add_platform(platform_texture, sf::Vector2f(400.0, 550.0), sf::Vector2f(0.5f, 0.3f));
     set.add_platform(platform_texture, sf::Vector2f(600.0, 500.0), sf::Vector2f(0.5f, 0.3f));
     set.add_platform(platform_texture, sf::Vector2f(800.0, 450.0), sf::Vector2f(0.5f, 0.3f));
+   
+    
     return set;
-
-
 }
 
 
@@ -39,9 +38,8 @@ Set create_set_2() {
 
     set.add_platform(big_platform_texture, sf::Vector2f(1366, 600), sf::Vector2f(0.5f, 0.3f));
     set.add_platform(small_platform_texture, sf::Vector2f(1366+200, 550), sf::Vector2f(0.5f, 0.3f));
+
     return set;
-
-
 }
 
 
@@ -53,7 +51,9 @@ void spawn_set(std::vector<Set>& sets, sf::Texture &platform_texture) {
     Set& last_set = sets.back();
     Platform& last_platform = last_set.platforms.back();
 
-    if (last_platform.getPosition().x + last_platform.getGlobalBounds().width <= 1350) {
+    auto limit = last_platform.getPosition().x + last_platform.getGlobalBounds().width;
+
+    if (limit <= 1300) {
         set_choice = rand() % 2;
         Set set;
         switch (set_choice)
@@ -84,6 +84,35 @@ void clear_set(std::vector<Set>& sets) {
         sets.erase(sets.begin());
     }
 }
+
+
+//game functions
+
+bool over_borderline(Hero &hero, sf::RenderWindow &window) {
+   
+    if (hero.getPosition().x <= 0 || hero.getPosition().y >= window.getSize().y) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool lost_fight(Hero &hero, std::vector<Set>& sets) {
+    for (auto& set : sets) {
+        for (auto& enemy : set.enemies) {
+            if (hero.getGlobalBounds().intersects(enemy.getGlobalBounds())) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+}
+
+
+
 
 //main
 int main() {
