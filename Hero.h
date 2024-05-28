@@ -74,9 +74,7 @@ public:
 	void collision(std::vector<Set> &sets);
 
 	//info methods
-	State get_attitude() {
-		return attitude;
-	}
+	State get_attitude(); 
 	//update
 	void update(sf::Time &elapsed_time, std::vector<Set> &sets);
 

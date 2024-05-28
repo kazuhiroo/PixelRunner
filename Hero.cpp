@@ -114,3 +114,7 @@ void Hero::update(sf::Time& elapsed_time, std::vector<Set>& sets) {
     this->attack(elapsed_time);
 
 }
+
+State Hero::get_attitude(){
+    return attitude;
+}
