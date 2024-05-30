@@ -15,8 +15,14 @@ struct Set {
     //struct for gamesets
     std::vector<Platform> platforms;
 	std::vector<sf::Texture> platform_textures;
-	std::vector<Enemy> enemies;
 	//bonuses
+		/*
+		std::vector...
+		*/
+	//enemies
+	std::vector<Enemy> enemies;
+	sf::Texture enemy_texture;
+	
 
 	void add_platform(sf::Texture& texture, const sf::Vector2f& position, const sf::Vector2f& scale = { 1.0f, 1.0f }) {
 		
@@ -30,8 +36,6 @@ struct Set {
 		for (size_t i = 0; i < platforms.size(); i++)
 			platforms[i].setTexture(platform_textures[i]);
 	}
-
-
     void update(sf::Time& elapsed_time) {
 		init();
         for (auto& platform : platforms) {
@@ -53,7 +57,8 @@ private:
 
 	const float jump_height = 110.0;
 	const float horizontal_velocity = 600.0;
-	const float vertical_velocity = 150.0;
+	const float forward_velocity = 150.0;
+	const float back_velocity = -200.0;
 	const float state_velocity = 0;
 	const float g = 981.0;
 

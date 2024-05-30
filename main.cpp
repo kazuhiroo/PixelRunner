@@ -1,20 +1,22 @@
 #include "Hero.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+
+#include <cstdlib>
 #include <iostream>
 
 #define HEIGHT 768
 #define WIDTH 1366
 #define LIMIT 1200
 #define HALF 0.5, 0.5
+
+
 //creating basic game objects
 
 Hero create_hero() {
     //create hero object
     sf::Texture hero_texture;
-    if (!hero_texture.loadFromFile("resources/character.png")) {
-        std::cerr << "Error loading character.png\n";
-    }
+    hero_texture.loadFromFile("resources/character.png");
 
     Hero hero(hero_texture, sf::Vector2f(200.0, 200.0), 9);
     hero.setScale(2, 2);
@@ -29,10 +31,7 @@ Hero create_hero() {
 
 GraphicalObject create_sky() {
     sf::Texture sky_texture;
-    if (!sky_texture.loadFromFile("resources/sky.png")) {
-        std::cerr << "Error loading sky.png\n";
-    }
-
+    sky_texture.loadFromFile("resources/sky.png");
     GraphicalObject sky(sky_texture, sf::Vector2f(0.0, 0.0), sf::IntRect(0, 0, WIDTH, HEIGHT));
     sky.setScale(1, 2.5);
 
@@ -55,11 +54,10 @@ Set create_set_1() {
     platform_texture.loadFromFile("resources/platform.png");
 
     set.add_platform(platform_texture, sf::Vector2f(WIDTH, 600.0), sf::Vector2f(HALF));
-    set.add_platform(platform_texture, sf::Vector2f(WIDTH + 200.0, 550.0), sf::Vector2f(HALF));
-    set.add_platform(platform_texture, sf::Vector2f(WIDTH + 400.0, 500.0), sf::Vector2f(HALF));
-    set.add_platform(platform_texture, sf::Vector2f(WIDTH + 600.0, 450.0), sf::Vector2f(HALF));
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH + 200.0, 510.0), sf::Vector2f(HALF));
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH + 400.0, 420.0), sf::Vector2f(HALF));
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH + 600.0, 330.0), sf::Vector2f(HALF));
    
-    
     return set;
 }
 
@@ -72,9 +70,9 @@ Set create_set_2() {
     small_platform_texture.loadFromFile("resources/small_platform.png");
 
     set.add_platform(platform_texture, sf::Vector2f(WIDTH, 600), sf::Vector2f(HALF));
-    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH +200, 550), sf::Vector2f(HALF));
-    set.add_platform(platform_texture, sf::Vector2f(WIDTH+400, 600), sf::Vector2f(HALF));
-    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH + 600, 550), sf::Vector2f(HALF));
+    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH +250, 550), sf::Vector2f(HALF));
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH+500, 600), sf::Vector2f(HALF));
+    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH + 750, 550), sf::Vector2f(HALF));
 
     return set;
 }
@@ -86,10 +84,10 @@ Set create_set_3() {
     small_platform_texture.loadFromFile("resources/small_platform.png");
     long_platform_texture.loadFromFile("resources/long_platform.png");
 
-    set.add_platform(long_platform_texture, sf::Vector2f(WIDTH, 600), sf::Vector2f(0.5f, 0.5f));
-    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH + 200, 700), sf::Vector2f(0.5f, 0.5f));
-    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH + 400, 600), sf::Vector2f(0.5f, 0.5f));
-    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH + 700, 550), sf::Vector2f(0.5f, 0.5f));
+    set.add_platform(long_platform_texture, sf::Vector2f(WIDTH, 600), sf::Vector2f(HALF));
+    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH + 200, 700), sf::Vector2f(HALF));
+    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH + 400, 600), sf::Vector2f(HALF));
+    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH + 600, 550), sf::Vector2f(HALF));
 
     return set;
 }
@@ -98,19 +96,43 @@ Set create_set_4() {
     Set set;
     sf::Texture ground_platform_texture;
     sf::Texture medium_platform_texture;
+    sf::Texture long_platform_texture;
+    sf::Texture platform_texture;
 
     ground_platform_texture.loadFromFile("resources/ground_platform.png");
     medium_platform_texture.loadFromFile("resources/medium_platform.png");
+    long_platform_texture.loadFromFile("resources/long_platform.png");
+    platform_texture.loadFromFile("resources/platform.png");
 
+    
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH + 300.0, 500), sf::Vector2f(HALF));
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH + 500.0, 400), sf::Vector2f(HALF));
+    set.add_platform(long_platform_texture, sf::Vector2f(WIDTH + 700.0, 300), sf::Vector2f(HALF));
     set.add_platform(ground_platform_texture, sf::Vector2f(WIDTH, 600), sf::Vector2f(HALF));
 
     return set;
 }
 
+Set create_set_5() {
+    Set set;
+    sf::Texture ground_platform_texture;
+    sf::Texture medium_platform_texture;
+    sf::Texture small_platform_texture;
+
+    ground_platform_texture.loadFromFile("resources/ground_platform.png");
+    small_platform_texture.loadFromFile("resources/small_platform.png");
+    medium_platform_texture.loadFromFile("resources/medium_platform.png");
+
+    set.add_platform(medium_platform_texture, sf::Vector2f(WIDTH, 550), sf::Vector2f(HALF));
+    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH+200, 460), sf::Vector2f(HALF));
+    set.add_platform(ground_platform_texture, sf::Vector2f(WIDTH + 400, 370), sf::Vector2f(HALF));
+
+    return set;
+}
 //spawn - clear mechanism
 void spawn_set(std::vector<Set>& sets) {
     int set_choice;
-    static int previous_choice = 0;
+    static int previous_choice = 10;
 
     Set& last_set = sets.back();
     Platform& last_platform = last_set.platforms.back();
@@ -120,7 +142,7 @@ void spawn_set(std::vector<Set>& sets) {
     if (limit <= LIMIT) {
         
         do {
-            set_choice = rand() % 3;
+            set_choice = rand() % 5;
         } while (set_choice == previous_choice);
 
         previous_choice = set_choice;
@@ -138,6 +160,14 @@ void spawn_set(std::vector<Set>& sets) {
             break;
         case 2:
             set = create_set_3();
+            sets.emplace_back(set);
+            break;
+        case 3:
+            set = create_set_4();
+            sets.emplace_back(set);
+            break;
+        case 4:
+            set = create_set_5();
             sets.emplace_back(set);
             break;
         default:
@@ -197,6 +227,7 @@ void end_game(bool& end, sf::RenderWindow &window) {
 //main
 int main() {
     //game variables
+    srand(static_cast<unsigned int>(time(0)));
     bool end = false;
     sf::Clock clock;
 

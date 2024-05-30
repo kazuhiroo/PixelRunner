@@ -38,11 +38,11 @@ void Hero::movement(sf::Time& elapsed_time) {
 
     //left-right
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        position.x -= vertical_velocity * elapsed_time.asSeconds();
+        position.x += back_velocity * elapsed_time.asSeconds();
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        position.x += vertical_velocity * elapsed_time.asSeconds();
+        position.x += forward_velocity * elapsed_time.asSeconds();
     }
 
     //down
