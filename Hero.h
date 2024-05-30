@@ -59,7 +59,7 @@ private:
 	const float horizontal_velocity = 600.0;
 	const float forward_velocity = 150.0;
 	const float back_velocity = -200.0;
-	const float state_velocity = 0;
+	const float state_velocity = 50;
 	const float g = 981.0;
 
 	//state

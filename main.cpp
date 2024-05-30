@@ -115,65 +115,87 @@ Set create_set_4() {
 
 Set create_set_5() {
     Set set;
-    sf::Texture ground_platform_texture;
+    sf::Texture platform_texture;
     sf::Texture medium_platform_texture;
     sf::Texture small_platform_texture;
 
-    ground_platform_texture.loadFromFile("resources/ground_platform.png");
+    platform_texture.loadFromFile("resources/platform.png");
     small_platform_texture.loadFromFile("resources/small_platform.png");
     medium_platform_texture.loadFromFile("resources/medium_platform.png");
 
     set.add_platform(medium_platform_texture, sf::Vector2f(WIDTH, 550), sf::Vector2f(HALF));
     set.add_platform(small_platform_texture, sf::Vector2f(WIDTH+200, 460), sf::Vector2f(HALF));
-    set.add_platform(ground_platform_texture, sf::Vector2f(WIDTH + 400, 370), sf::Vector2f(HALF));
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH + 400, 370), sf::Vector2f(HALF));
 
     return set;
 }
+
+Set create_set_break() {
+    Set set;
+    sf::Texture ground_platform_texture;
+
+    ground_platform_texture.loadFromFile("resources/ground_platform.png");
+
+    set.add_platform(ground_platform_texture, sf::Vector2f(WIDTH, 600), sf::Vector2f(HALF));
+
+    return set;
+}
+
 //spawn - clear mechanism
 void spawn_set(std::vector<Set>& sets) {
     int set_choice;
-    static int previous_choice = 10;
-
+    static int previous_choice;
+    static int spawned = 0;
     Set& last_set = sets.back();
     Platform& last_platform = last_set.platforms.back();
 
     auto limit = last_platform.getPosition().x + last_platform.getGlobalBounds().width;
 
     if (limit <= LIMIT) {
-        
-        do {
-            set_choice = rand() % 5;
-        } while (set_choice == previous_choice);
 
-        previous_choice = set_choice;
+        if (spawned < 6) {
+            do {
+                set_choice = rand() % 5;
+            } while (set_choice == previous_choice);
 
-        Set set;
-        switch (set_choice)
-        {
-        case 0:
-            set = create_set_1();
+            previous_choice = set_choice;
+
+            Set set;
+            switch (set_choice)
+            {
+            case 0:
+                set = create_set_1();
+                sets.emplace_back(set);
+                break;
+            case 1:
+                set = create_set_2();
+                sets.emplace_back(set);
+                break;
+            case 2:
+                set = create_set_3();
+                sets.emplace_back(set);
+                break;
+            case 3:
+                set = create_set_4();
+                sets.emplace_back(set);
+                break;
+            case 4:
+                set = create_set_5();
+                sets.emplace_back(set);
+                break;
+            default:
+                break;
+            }
+            spawned++;
+        }
+        else {
+            Set set = create_set_break();
             sets.emplace_back(set);
-            break;
-        case 1:
-            set = create_set_2();
-            sets.emplace_back(set);
-            break;
-        case 2:
-            set = create_set_3();
-            sets.emplace_back(set);
-            break;
-        case 3:
-            set = create_set_4();
-            sets.emplace_back(set);
-            break;
-        case 4:
-            set = create_set_5();
-            sets.emplace_back(set);
-            break;
-        default:
-            break;
+            spawned = 0;
         }
     }
+        
+        
 }
 
 void clear_set(std::vector<Set>& sets) {
@@ -192,7 +214,8 @@ void clear_set(std::vector<Set>& sets) {
 
 void over_borderline(Hero &hero, sf::RenderWindow &window, bool &end) {
    
-    if (hero.getPosition().x <= 0 || hero.getPosition().y >= window.getSize().y) {
+    if (hero.getPosition().x + hero.getGlobalBounds().width <= 0 ||
+        hero.getPosition().y >= window.getSize().y) {
         end = true;
     }
 }
@@ -223,6 +246,7 @@ void end_game(bool& end, sf::RenderWindow &window) {
         window.close();
     }
 }
+
 
 //main
 int main() {
@@ -294,8 +318,10 @@ int main() {
         hero.movement(elapsed_time);
         hero.update(elapsed_time, sets);
         
+        //enemy
         enemy.animate(elapsed_time);
 
+  
 
         //render
         window.clear();

@@ -91,7 +91,7 @@ void Hero::attack(sf::Time &elapsed_time) {
    
     this->attack_time += elapsed_time;
 
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && attitude == State::passive && attack_time.asSeconds() >= 1.0) {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && attitude == State::passive && attack_time.asSeconds() >= 2.0) {
         std::cout << "you are attacking\n";
         this->attitude = State::attacking;
         this->attack_time = sf::Time::Zero;
@@ -101,7 +101,7 @@ void Hero::attack(sf::Time &elapsed_time) {
 //udpate method
 void Hero::update(sf::Time& elapsed_time, std::vector<Set>& sets) {
 
-    if (attack_time.asSeconds() >= 2.0 && attitude == State::attacking) {
+    if (attack_time.asSeconds() >= 1.0 && attitude == State::attacking) {
         std::cout << "you are passive\n";
         this->attitude = State::passive;
     }
