@@ -147,7 +147,6 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GraphicalObject.h" />
     <ClInclude Include="Hero.h" />
-    <ClInclude Include="Classes.h" />
     <ClInclude Include="Platform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

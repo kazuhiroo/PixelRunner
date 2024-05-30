@@ -3,7 +3,6 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 
-
 //creating basic game objects
 
 Hero create_hero() {

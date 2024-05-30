@@ -27,7 +27,7 @@ struct Set {
 
 
 	void init() {
-		for (int i = 0; i < platforms.size(); i++)
+		for (size_t i = 0; i < platforms.size(); i++)
 			platforms[i].setTexture(platform_textures[i]);
 	}
 

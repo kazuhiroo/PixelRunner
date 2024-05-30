@@ -5,7 +5,7 @@ class Arrow: public GraphicalObject
 {
 private:
 	//variables
-	const float vertical_velocity = 500.0;
+	const float vertical_velocity = -500.0;
 public:
 	//constructors
 	Arrow(sf::Texture t, sf::Vector2f p);
