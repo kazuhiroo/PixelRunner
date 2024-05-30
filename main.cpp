@@ -3,14 +3,13 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 
-//comment
 
 //creating basic game objects
 
 Hero create_hero() {
     //create hero object
     sf::Texture hero_texture;
-    if (!hero_texture.loadFromFile("character.png")) {
+    if (!hero_texture.loadFromFile("resources/character.png")) {
         std::cerr << "Error loading character.png\n";
     }
 
@@ -27,7 +26,7 @@ Hero create_hero() {
 
 GraphicalObject create_sky() {
     sf::Texture sky_texture;
-    if (!sky_texture.loadFromFile("sky.png")) {
+    if (!sky_texture.loadFromFile("resources/sky.png")) {
         std::cerr << "Error loading sky.png\n";
     }
 
@@ -41,22 +40,21 @@ GraphicalObject create_sky() {
 Set create_starting_set() {
     Set set;
     sf::Texture platform_texture;
-    platform_texture.loadFromFile("starting_platform.png");
+    platform_texture.loadFromFile("resources/ground_platform.png");
 
-    set.add_platform(platform_texture, sf::Vector2f(0.0, 600.0));
-
+    set.add_platform(platform_texture, sf::Vector2f(50.0, 600.0), sf::Vector2f(0.5f, 0.5f));
     return set;
 }
 
 Set create_set_1() {
     Set set;
     sf::Texture platform_texture;
-    platform_texture.loadFromFile("platform.png");
+    platform_texture.loadFromFile("resources/platform.png");
 
-    set.add_platform(platform_texture, sf::Vector2f(1366, 600.0), sf::Vector2f(0.5f, 0.3f));
-    set.add_platform(platform_texture, sf::Vector2f(1366 + 200.0, 550.0), sf::Vector2f(0.5f, 0.3f));
-    set.add_platform(platform_texture, sf::Vector2f(1366 + 400.0, 500.0), sf::Vector2f(0.5f, 0.3f));
-    set.add_platform(platform_texture, sf::Vector2f(1366 + 600.0, 450.0), sf::Vector2f(0.5f, 0.3f));
+    set.add_platform(platform_texture, sf::Vector2f(1366, 600.0), sf::Vector2f(0.5f, 0.5f));
+    set.add_platform(platform_texture, sf::Vector2f(1366 + 200.0, 550.0), sf::Vector2f(0.5f, 0.5f));
+    set.add_platform(platform_texture, sf::Vector2f(1366 + 400.0, 500.0), sf::Vector2f(0.5f, 0.5f));
+    set.add_platform(platform_texture, sf::Vector2f(1366 + 600.0, 450.0), sf::Vector2f(0.5f, 0.5f));
    
     
     return set;
@@ -67,11 +65,11 @@ Set create_set_2() {
     sf::Texture big_platform_texture;
     sf::Texture small_platform_texture;
 
-    big_platform_texture.loadFromFile("platform.png");
-    small_platform_texture.loadFromFile("platform_small.png");
+    big_platform_texture.loadFromFile("resources/platform.png");
+    small_platform_texture.loadFromFile("resources/small_platform.png");
 
-    set.add_platform(big_platform_texture, sf::Vector2f(1366, 600), sf::Vector2f(0.5f, 0.3f));
-    set.add_platform(small_platform_texture, sf::Vector2f(1366+200, 550), sf::Vector2f(0.5f, 0.3f));
+    set.add_platform(big_platform_texture, sf::Vector2f(1366, 600), sf::Vector2f(0.5f, 0.5f));
+    set.add_platform(small_platform_texture, sf::Vector2f(1366+200, 550), sf::Vector2f(0.5f, 0.5f));
 
     return set;
 }
@@ -146,7 +144,6 @@ void fight(Hero &hero, std::vector<Set>& sets, bool &end) {
     }
 }
 
-
 void end_game(bool& end, sf::RenderWindow &window) {
     if (end) {
         //sleep cout END - POINTS
@@ -174,7 +171,7 @@ int main() {
     
     //create enemy (just for trying if it works)
     sf::Texture enemy_texture;
-    enemy_texture.loadFromFile("enemy.png");
+    enemy_texture.loadFromFile("resources/enemy.png");
     Enemy enemy(enemy_texture, sf::Vector2f(window.getSize().x/2,window.getSize().y/2), 9);
     enemy.setScale(2, 2);
 

@@ -4,7 +4,7 @@
 class Platform: public GraphicalObject
 {
 private:
-	float vertical_velocity = 100.0;
+	float vertical_velocity = 150.0;
 
 public:
 	Platform(sf::Texture& t, sf::Vector2f p);
