@@ -47,10 +47,7 @@ void Hero::movement(sf::Time& elapsed_time) {
 
     //down
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        
-        if (state == State::stable) {
-            position.y += horizontal_velocity * elapsed_time.asSeconds();
-        }
+        position.y += horizontal_velocity * elapsed_time.asSeconds();
         
     }
 

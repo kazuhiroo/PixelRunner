@@ -51,8 +51,8 @@ private:
 	
 	float jump_velocity = 0;
 
-	const float jump_height = 100.0;
-	const float horizontal_velocity = 1000.0;
+	const float jump_height = 110.0;
+	const float horizontal_velocity = 600.0;
 	const float vertical_velocity = 150.0;
 	const float state_velocity = 0;
 	const float g = 981.0;

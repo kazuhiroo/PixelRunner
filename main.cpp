@@ -3,6 +3,10 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 
+#define HEIGHT 768
+#define WIDTH 1366
+#define LIMIT 1200
+#define HALF 0.5, 0.5
 //creating basic game objects
 
 Hero create_hero() {
@@ -29,7 +33,7 @@ GraphicalObject create_sky() {
         std::cerr << "Error loading sky.png\n";
     }
 
-    GraphicalObject sky(sky_texture, sf::Vector2f(0.0, 0.0), sf::IntRect(0, 0, 1366, 768));
+    GraphicalObject sky(sky_texture, sf::Vector2f(0.0, 0.0), sf::IntRect(0, 0, WIDTH, HEIGHT));
     sky.setScale(1, 2.5);
 
     return sky;
@@ -38,10 +42,10 @@ GraphicalObject create_sky() {
 //creating sets methods
 Set create_starting_set() {
     Set set;
-    sf::Texture platform_texture;
-    platform_texture.loadFromFile("resources/ground_platform.png");
+    sf::Texture ground_platform_texture;
+    ground_platform_texture.loadFromFile("resources/ground_platform.png");
 
-    set.add_platform(platform_texture, sf::Vector2f(50.0, 600.0), sf::Vector2f(0.5f, 0.5f));
+    set.add_platform(ground_platform_texture, sf::Vector2f(50.0, 600.0), sf::Vector2f(HALF));
     return set;
 }
 
@@ -50,10 +54,10 @@ Set create_set_1() {
     sf::Texture platform_texture;
     platform_texture.loadFromFile("resources/platform.png");
 
-    set.add_platform(platform_texture, sf::Vector2f(1366, 600.0), sf::Vector2f(0.5f, 0.5f));
-    set.add_platform(platform_texture, sf::Vector2f(1366 + 200.0, 550.0), sf::Vector2f(0.5f, 0.5f));
-    set.add_platform(platform_texture, sf::Vector2f(1366 + 400.0, 500.0), sf::Vector2f(0.5f, 0.5f));
-    set.add_platform(platform_texture, sf::Vector2f(1366 + 600.0, 450.0), sf::Vector2f(0.5f, 0.5f));
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH, 600.0), sf::Vector2f(HALF));
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH + 200.0, 550.0), sf::Vector2f(HALF));
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH + 400.0, 500.0), sf::Vector2f(HALF));
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH + 600.0, 450.0), sf::Vector2f(HALF));
    
     
     return set;
@@ -61,30 +65,66 @@ Set create_set_1() {
 
 Set create_set_2() {
     Set set;
-    sf::Texture big_platform_texture;
+    sf::Texture platform_texture;
     sf::Texture small_platform_texture;
 
-    big_platform_texture.loadFromFile("resources/platform.png");
+    platform_texture.loadFromFile("resources/platform.png");
     small_platform_texture.loadFromFile("resources/small_platform.png");
 
-    set.add_platform(big_platform_texture, sf::Vector2f(1366, 600), sf::Vector2f(0.5f, 0.5f));
-    set.add_platform(small_platform_texture, sf::Vector2f(1366+200, 550), sf::Vector2f(0.5f, 0.5f));
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH, 600), sf::Vector2f(HALF));
+    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH +200, 550), sf::Vector2f(HALF));
+    set.add_platform(platform_texture, sf::Vector2f(WIDTH+400, 600), sf::Vector2f(HALF));
+    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH + 600, 550), sf::Vector2f(HALF));
 
     return set;
 }
 
+Set create_set_3() {
+    Set set;
+    sf::Texture small_platform_texture;
+    sf::Texture long_platform_texture;
+    small_platform_texture.loadFromFile("resources/small_platform.png");
+    long_platform_texture.loadFromFile("resources/long_platform.png");
+
+    set.add_platform(long_platform_texture, sf::Vector2f(WIDTH, 600), sf::Vector2f(0.5f, 0.5f));
+    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH + 200, 700), sf::Vector2f(0.5f, 0.5f));
+    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH + 400, 600), sf::Vector2f(0.5f, 0.5f));
+    set.add_platform(small_platform_texture, sf::Vector2f(WIDTH + 700, 550), sf::Vector2f(0.5f, 0.5f));
+
+    return set;
+}
+
+Set create_set_4() {
+    Set set;
+    sf::Texture ground_platform_texture;
+    sf::Texture medium_platform_texture;
+
+    ground_platform_texture.loadFromFile("resources/ground_platform.png");
+    medium_platform_texture.loadFromFile("resources/medium_platform.png");
+
+    set.add_platform(ground_platform_texture, sf::Vector2f(WIDTH, 600), sf::Vector2f(HALF));
+
+    return set;
+}
 
 //spawn - clear mechanism
 void spawn_set(std::vector<Set>& sets) {
     int set_choice;
+    static int previous_choice = 0;
 
     Set& last_set = sets.back();
     Platform& last_platform = last_set.platforms.back();
 
     auto limit = last_platform.getPosition().x + last_platform.getGlobalBounds().width;
 
-    if (limit <= 1300) {
-        set_choice = rand() % 2;
+    if (limit <= LIMIT) {
+        
+        do {
+            set_choice = rand() % 3;
+        } while (set_choice == previous_choice);
+
+        previous_choice = set_choice;
+
         Set set;
         switch (set_choice)
         {
@@ -94,6 +134,10 @@ void spawn_set(std::vector<Set>& sets) {
             break;
         case 1:
             set = create_set_2();
+            sets.emplace_back(set);
+            break;
+        case 2:
+            set = create_set_3();
             sets.emplace_back(set);
             break;
         default:
@@ -157,7 +201,7 @@ int main() {
     sf::Clock clock;
 
     //create the window
-    sf::RenderWindow window(sf::VideoMode(1366, 768), "PixelRunner");
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "PixelRunner");
     window.setFramerateLimit(60);
 
     //create sky object
@@ -171,7 +215,7 @@ int main() {
     //create enemy (just for trying if it works)
     sf::Texture enemy_texture;
     enemy_texture.loadFromFile("resources/enemy.png");
-    Enemy enemy(enemy_texture, sf::Vector2f(window.getSize().x/2,window.getSize().y/2), 9);
+    Enemy enemy(enemy_texture, sf::Vector2f(WIDTH/2,HEIGHT/2), 4);
     enemy.setScale(2, 2);
 
 
@@ -202,6 +246,7 @@ int main() {
                 }
             }
         }
+
         over_borderline(hero, window, end);
         end_game(end,window);
   
@@ -218,6 +263,9 @@ int main() {
         hero.movement(elapsed_time);
         hero.update(elapsed_time, sets);
         
+        enemy.animate(elapsed_time);
+
+
         //render
         window.clear();
         window.draw(sky);
@@ -230,7 +278,7 @@ int main() {
         }
         //enemy.render_arrows(window);
 
-        //window.draw(enemy);
+        window.draw(enemy);
         window.draw(hero);
 
         window.display();
