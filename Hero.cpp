@@ -6,6 +6,7 @@ Hero::Hero(sf::Texture t, sf::Vector2f p, int af): AnimatedObject(t,p,af){
 	this->setPosition(position);
 
     score = 0;
+    multiplier = 1;
 }
 
 Hero::~Hero() {
@@ -88,6 +89,11 @@ void Hero::collision(std::vector<Set> &sets) {
     
 }
 
+
+void Hero::gain_score(sf::Time &game_time) {
+    score += multiplier * game_time.asMicroseconds();
+}
+
 //attacking
 void Hero::attack(sf::Time &elapsed_time) {
    
@@ -107,7 +113,7 @@ void Hero::update(sf::Time& elapsed_time, std::vector<Set>& sets) {
         std::cout << "you are passive\n";
         this->attitude = State::passive;
     }
-
+    //this->gain_score();
     this->animate(elapsed_time);
     this->collision(sets);
     this->attack(elapsed_time);

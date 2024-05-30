@@ -29,6 +29,8 @@ public:
 
 class Star : public Bonus
 {
+private:
+	unsigned int value;
 public:
 	Star(sf::Texture& t, sf::Vector2f& p);
 	~Star();

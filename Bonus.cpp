@@ -25,7 +25,7 @@ Coin::~Coin() {
 
 void Coin::interaction(Hero& hero) {
 	if (hero.getGlobalBounds().intersects(this->getGlobalBounds())) {
-		hero.score += value;
+		hero.collected += value;
 	}
 }
 
@@ -34,6 +34,8 @@ void Coin::interaction(Hero& hero) {
 Star::Star(sf::Texture& t, sf::Vector2f& p) : Bonus(t, p) {
 	this->setTexture(texture);
 	this->setPosition(position);
+
+	value = 1;
 }
 
 
@@ -43,5 +45,7 @@ Star::~Star() {
 
 
 void Star::interaction(Hero& hero) {
-
+	if (hero.getGlobalBounds().intersects(this->getGlobalBounds())) {
+		hero.multiplier += value;
+	}
 }

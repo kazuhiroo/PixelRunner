@@ -8,7 +8,12 @@ enum class State {
 	in_air,
 
 	attacking,
-	passive
+	passive,
+	//???????????????
+	normal,
+	immune,
+	flying
+	
 };
 
 struct Set {
@@ -70,6 +75,9 @@ private:
 public:
 	//
 	unsigned int score;
+	unsigned int multiplier;
+	unsigned int collected;
+	/*State bonus_active;*/
 	//contructors
 	Hero(sf::Texture t, sf::Vector2f p, int af);
 	~Hero();
@@ -78,9 +86,9 @@ public:
 	void movement(sf::Time &elapsed_time);
 	void gravity(sf::Time &elapsed_time);
 	void attack(sf::Time& elapsed_time);
-	//collision
 	void collision(std::vector<Set> &sets);
-
+	//
+	void gain_score(sf::Time& game_time);
 	//info methods
 	State get_attitude(); 
 	//update

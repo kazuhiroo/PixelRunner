@@ -1,4 +1,6 @@
 #include "Hero.h"
+#include "Bonus.h"
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
@@ -245,6 +247,12 @@ void end_game(bool& end, sf::RenderWindow &window) {
     }
 }
 
+void test_fight(Hero& hero, Enemy& enemy, sf::Time &elapsed_time) {
+    if (hero.getGlobalBounds().intersects(enemy.getGlobalBounds())
+        && hero.get_attitude() == State::attacking) {
+        enemy.move(1000.0*elapsed_time.asSeconds(), 0.0);
+    }
+}
 
 //main
 int main() {
@@ -252,6 +260,7 @@ int main() {
     srand(static_cast<unsigned int>(time(0)));
     bool end = false;
     sf::Clock clock;
+    sf::Time game_time = clock.restart();
 
     //create the window
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "PixelRunner");
@@ -270,7 +279,6 @@ int main() {
     enemy_texture.loadFromFile("resources/enemy.png");
     Enemy enemy(enemy_texture, sf::Vector2f(WIDTH/2,HEIGHT/2), 4);
     enemy.setScale(2, 2);
-
 
     enemy.add_animation_frame(sf::IntRect(213, 0, 23, 37)); // 1 frame of animation
     enemy.add_animation_frame(sf::IntRect(263, 0, 23, 37)); // 2 frame
@@ -315,10 +323,11 @@ int main() {
         //hero methods
         hero.movement(elapsed_time);
         hero.update(elapsed_time, sets);
-        
+        hero.gain_score(game_time);
+
         //enemy
         enemy.animate(elapsed_time);
-
+       // test_fight(hero, enemy, elapsed_time);
   
 
         //render
@@ -337,7 +346,10 @@ int main() {
         window.draw(hero);
 
         window.display();
+
     }
+
+    std::cout << hero.score;
 
     return 0;
 }
