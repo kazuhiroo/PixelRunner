@@ -6,6 +6,7 @@ Hero::Hero(sf::Texture t, sf::Vector2f p, int af): AnimatedObject(t,p,af){
 	this->setPosition(position);
 
     score = 0;
+    collected = 0;
     multiplier = 1;
 }
 

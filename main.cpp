@@ -349,7 +349,7 @@ int main() {
 
     }
 
-    std::cout << hero.score;
+    std::cout <<"SCORE:\n" << hero.score << "\nCOINS COLLECTED:\n" << hero.collected;
 
     return 0;
 }
