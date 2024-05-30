@@ -6,7 +6,7 @@
 enum class State {
 	stable,
 	in_air,
-	slide,
+
 	attacking,
 	passive
 };
@@ -23,6 +23,7 @@ struct Set {
 	std::vector<Enemy> enemies;
 	sf::Texture enemy_texture;
 	
+	float objects_velocity = -150.0;
 
 	void add_platform(sf::Texture& texture, const sf::Vector2f& position, const sf::Vector2f& scale = { 1.0f, 1.0f }) {
 		
@@ -39,7 +40,7 @@ struct Set {
     void update(sf::Time& elapsed_time) {
 		init();
         for (auto& platform : platforms) {
-            platform.movement(elapsed_time);
+            platform.move(objects_velocity*elapsed_time.asSeconds(), 0.0);
         }
     }
 };
@@ -67,6 +68,8 @@ private:
 	State attitude = State::passive;
 
 public:
+	//
+	unsigned int score;
 	//contructors
 	Hero(sf::Texture t, sf::Vector2f p, int af);
 	~Hero();

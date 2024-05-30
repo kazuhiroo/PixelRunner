@@ -1,6 +1,5 @@
 #pragma once
 #include "AnimatedObject.h"
-#include "Arrow.h"
 
 class Enemy: public AnimatedObject
 {

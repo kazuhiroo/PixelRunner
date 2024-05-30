@@ -134,7 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedObject.cpp" />
-    <ClCompile Include="Arrow.cpp" />
+    <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GraphicalObject.cpp" />
     <ClCompile Include="Hero.cpp" />
@@ -143,7 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedObject.h" />
-    <ClInclude Include="Arrow.h" />
+    <ClInclude Include="Bonus.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GraphicalObject.h" />
     <ClInclude Include="Hero.h" />

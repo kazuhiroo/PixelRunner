@@ -12,7 +12,6 @@
 
 
 //creating basic game objects
-
 Hero create_hero() {
     //create hero object
     sf::Texture hero_texture;
@@ -211,7 +210,6 @@ void clear_set(std::vector<Set>& sets) {
 
 
 //game functions
-
 void over_borderline(Hero &hero, sf::RenderWindow &window, bool &end) {
    
     if (hero.getPosition().x + hero.getGlobalBounds().width <= 0 ||

@@ -10,6 +10,5 @@ public:
 	Platform(sf::Texture& t, sf::Vector2f p);
 	~Platform();
 
-	void movement(sf::Time& elapsed_time);
 };
 
