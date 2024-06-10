@@ -582,8 +582,6 @@ int main() {
         hero.render_arrows(window);
 
 
-
-
         if (pause) {
             window.draw(sf::Text(string_text(font, "PAUSE")));
         }
