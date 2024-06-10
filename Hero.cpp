@@ -8,6 +8,8 @@ Hero::Hero(sf::Texture t, sf::Vector2f p, int af): AnimatedObject(t,p,af){
     score = 0;
     collected = 0;
     multiplier = 1;
+
+    attack_texture.loadFromFile("resources/character_attack.png");
 }
 
 Hero::~Hero() {
@@ -32,10 +34,10 @@ void Hero::movement(sf::Time& elapsed_time) {
 
     //jump
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        
         if (state == State::stable) {
             jump_velocity = -sqrt(2 * g * jump_height);
             state = State::in_air;
-
             position.y -= jump_velocity * elapsed_time.asSeconds();
         }
     }
@@ -51,7 +53,11 @@ void Hero::movement(sf::Time& elapsed_time) {
 
     //down
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        position.y += horizontal_velocity * elapsed_time.asSeconds();
+        if (state == State::stable){
+
+            position.y += horizontal_velocity * elapsed_time.asSeconds();
+            }
+        
         
     }
 
@@ -77,6 +83,7 @@ void Hero::collision(std::vector<Set> &sets) {
                // std::cout << "Collision detected at platform: " << e.getPosition().x << ", " << e.getPosition().y << "\n";
                 detected = true;
                 state = State::stable;
+                
                 break;
             }
             else {
@@ -85,11 +92,21 @@ void Hero::collision(std::vector<Set> &sets) {
         }
         if (detected) {
             break;
+            
         }
     }
     
 }
 
+void Hero::lost() {
+
+    object_time = sf::seconds(-2);
+    jump_height = 0;
+    horizontal_velocity = 0;
+    forward_velocity = 0;
+    back_velocity = -0;
+    state_velocity = 0;
+}
 
 void Hero::gain_score(sf::Time &game_time) {
     score += multiplier * game_time.asMicroseconds();
@@ -100,22 +117,29 @@ void Hero::attack(sf::Time &elapsed_time) {
    
     this->attack_time += elapsed_time;
 
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && attitude == State::passive && attack_time.asSeconds() >= 2.0) {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && 
+        attitude == State::passive &&
+        attack_time.asSeconds() >= 0.5) {
+        setTextureRect(sf::IntRect(450, 0, 30, 37));
         std::cout << "you are attacking\n";
         this->attitude = State::attacking;
         this->attack_time = sf::Time::Zero;
     }
 }
 
+
+
 //udpate method
 void Hero::update(sf::Time& elapsed_time, std::vector<Set>& sets) {
 
-    if (attack_time.asSeconds() >= 1.0 && attitude == State::attacking) {
+    if (attack_time.asSeconds() >= 0.5 && attitude == State::attacking) {
         std::cout << "you are passive\n";
         this->attitude = State::passive;
+        setTexture(texture);
     }
-    //this->gain_score();
-    this->animate(elapsed_time);
+    if (attitude == State::passive) {
+        this->animate(elapsed_time);
+    }
     this->collision(sets);
     this->attack(elapsed_time);
 

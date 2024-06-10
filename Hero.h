@@ -2,6 +2,8 @@
 #include "AnimatedObject.h"
 #include "Platform.h"
 #include "Enemy.h"
+#include "Bonus.h"
+
 
 enum class State {
 	stable,
@@ -13,60 +15,53 @@ enum class State {
 	normal,
 	immune,
 	flying
-	
+
 };
 
+class Bonus;
+
 struct Set {
-    //struct for gamesets
-    std::vector<Platform> platforms;
+	std::vector<Platform> platforms;
 	std::vector<sf::Texture> platform_textures;
-	//bonuses
-		/*
-		std::vector...
-		*/
-	//enemies
+	std::vector<Bonus*> bonuses;
 	std::vector<Enemy> enemies;
 	sf::Texture enemy_texture;
-	
-	float objects_velocity = -150.0;
+
+	float objects_velocity = -200.0;
 
 	void add_platform(sf::Texture& texture, const sf::Vector2f& position, const sf::Vector2f& scale = { 1.0f, 1.0f }) {
-		
 		platform_textures.push_back(texture);
 		platforms.emplace_back(texture, position);
 		platforms.back().setScale(scale);
 	}
 
-
-	void init() {
-		for (size_t i = 0; i < platforms.size(); i++)
-			platforms[i].setTexture(platform_textures[i]);
+	void add_bonus(Bonus* bonus) {
+		bonuses.push_back(bonus);
 	}
-    void update(sf::Time& elapsed_time) {
-		init();
-        for (auto& platform : platforms) {
-            platform.move(objects_velocity*elapsed_time.asSeconds(), 0.0);
-        }
-    }
+
+	void add_enemy(Enemy &enemy, sf::Texture &e_texture) {
+		enemies.push_back(enemy);
+		enemy_texture = e_texture;
+	}
 };
 
-
-class Hero: public AnimatedObject
+class Hero : public AnimatedObject
 {
 private:
 	//attacking 
 	sf::Time attack_time;
 
 	//movement variables
-	
 	float jump_velocity = 0;
 
-	const float jump_height = 110.0;
-	const float horizontal_velocity = 600.0;
-	const float forward_velocity = 150.0;
-	const float back_velocity = -200.0;
-	const float state_velocity = 50;
+	float jump_height = 115.0;
+	float horizontal_velocity = 600.0;
+	float forward_velocity = 200.0;
+	float back_velocity = -300.0;
+	float state_velocity = 50;
 	const float g = 981.0;
+
+	sf::Texture attack_texture;
 
 	//state
 	State state = State::stable;
@@ -83,15 +78,16 @@ public:
 	~Hero();
 
 	//movement methods
-	void movement(sf::Time &elapsed_time);
-	void gravity(sf::Time &elapsed_time);
+	void movement(sf::Time& elapsed_time);
+	void gravity(sf::Time& elapsed_time);
 	void attack(sf::Time& elapsed_time);
-	void collision(std::vector<Set> &sets);
+	void collision(std::vector<Set>& sets);
 	//
+	void lost();
 	void gain_score(sf::Time& game_time);
 	//info methods
-	State get_attitude(); 
+	State get_attitude();
 	//update
-	void update(sf::Time &elapsed_time, std::vector<Set> &sets);
+	void update(sf::Time& elapsed_time, std::vector<Set>& sets);
 
 };

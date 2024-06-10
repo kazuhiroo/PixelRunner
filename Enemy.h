@@ -1,16 +1,17 @@
 #pragma once
 #include "AnimatedObject.h"
+#include "Arrow.h"
 
 class Enemy: public AnimatedObject
 {
 private:
 	//variables for an attack
-	//std::vector<std::unique_ptr<Arrow>> arrows;
-	//sf::Time shoot_time;
+	sf::Time shoot_time;
 
 public:
+	std::vector<Arrow*> arrows;
 	//constructor
-	Enemy(sf::Texture t, sf::Vector2f p, int af);
+	Enemy(sf::Texture &t, sf::Vector2f p, int af);
 	~Enemy();
 
 	//attack method for enemy
@@ -21,6 +22,6 @@ public:
 	void clear_arrows();
 
 	//update
-	void update(sf::Time& elapsed_time);
+	void update(sf::Time& elapsed_time, float& velocity);
 };
 
