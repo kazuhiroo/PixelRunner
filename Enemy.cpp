@@ -14,6 +14,7 @@ Enemy::~Enemy() {
 void Enemy::shooting(sf::Time& elapsed_time) {
 	shoot_time += elapsed_time;
 	if (shoot_time.asSeconds() >= 2.0) {
+		//setTextureRect(sf::IntRect(450, 0, 30, 37));
 		sf::Texture arrow_texture;
 		arrow_texture.loadFromFile("resources/arrow.png");
 		sf::Vector2f arrow_position;

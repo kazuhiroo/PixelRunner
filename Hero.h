@@ -10,12 +10,9 @@ enum class State {
 	in_air,
 
 	attacking,
+	shooting,
 	passive,
-	//???????????????
-	normal,
-	immune,
-	flying
-
+	
 };
 
 class Bonus;
@@ -62,17 +59,21 @@ private:
 	const float g = 981.0;
 
 	sf::Texture attack_texture;
-
+	
 	//state
 	State state = State::stable;
 	State attitude = State::passive;
 
+	
 public:
 	//
+	std::vector<Arrow*> arrows;
+
+	unsigned int eq = 5;
 	unsigned int score;
 	unsigned int multiplier;
 	unsigned int collected;
-	/*State bonus_active;*/
+	
 	//contructors
 	Hero(sf::Texture t, sf::Vector2f p, int af);
 	~Hero();
@@ -80,9 +81,13 @@ public:
 	//movement methods
 	void movement(sf::Time& elapsed_time);
 	void gravity(sf::Time& elapsed_time);
-	void attack(sf::Time& elapsed_time);
 	void collision(std::vector<Set>& sets);
-	//
+	//attack
+	void attack(sf::Time& elapsed_time);
+	void shooting(sf::Time& elapsed_time);
+	void render_arrows(sf::RenderWindow& window);
+	void clear_arrows();
+	//game info
 	void lost();
 	void gain_score(sf::Time& game_time);
 	//info methods

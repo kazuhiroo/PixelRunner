@@ -17,15 +17,15 @@
 Hero create_hero() {
 
     sf::Texture hero_texture;
-    hero_texture.loadFromFile("resources/character1.png");
+    hero_texture.loadFromFile("resources/character2.png");
 
     Hero hero(hero_texture, sf::Vector2f(200.0, 200.0), 9);
     hero.setScale(2, 2);
 
-    hero.add_animation_frame(sf::IntRect(213, 0, 23, 37)); // 1 frame of animation
-    hero.add_animation_frame(sf::IntRect(263, 0, 23, 37)); // 2 frame
-    hero.add_animation_frame(sf::IntRect(313, 0, 23, 37)); // 3 frame
-    hero.add_animation_frame(sf::IntRect(363, 0, 23, 37)); // 4 frame
+    hero.add_animation_frame(sf::IntRect(205, 0, 30, 37)); // 1 frame of animation
+    hero.add_animation_frame(sf::IntRect(255, 0, 30, 37)); // 2 frame
+    hero.add_animation_frame(sf::IntRect(305, 0, 30, 37)); // 3 frame
+    hero.add_animation_frame(sf::IntRect(355, 0, 30, 37)); // 4 frame
 
     return hero;
 }
@@ -75,7 +75,7 @@ Set create_set_1() {
     sf::Vector2f enemy_position(WIDTH+650,330.0-70);
     sf::Texture enemy_texture;
 
-    enemy_texture.loadFromFile("resources/enemy.png");
+    enemy_texture.loadFromFile("resources/enemy1.png");
     platform_texture.loadFromFile("resources/platform.png");
     coin_texture.loadFromFile("resources/coin.png");
     star_texture.loadFromFile("resources/star.png");
@@ -137,7 +137,7 @@ Set create_set_3() {
     sf::Vector2f enemy_position(WIDTH + 100, 600.0-70);
     sf::Texture enemy_texture;
 
-    enemy_texture.loadFromFile("resources/enemy.png");
+    enemy_texture.loadFromFile("resources/enemy1.png");
     small_platform_texture.loadFromFile("resources/small_platform.png");
     long_platform_texture.loadFromFile("resources/long_platform.png");
     coin_texture.loadFromFile("resources/coin.png");
@@ -175,7 +175,7 @@ Set create_set_4() {
     sf::Texture star_texture;
     sf::Texture enemy_texture;
 
-    enemy_texture.loadFromFile("resources/enemy.png");
+    enemy_texture.loadFromFile("resources/enemy1.png");
     ground_platform_texture.loadFromFile("resources/ground_platform.png");
     medium_platform_texture.loadFromFile("resources/medium_platform.png");
     long_platform_texture.loadFromFile("resources/long_platform.png");
@@ -266,7 +266,7 @@ void spawn_set(std::vector<Set>& sets) {
 
     if (limit <= LIMIT) {
 
-        if (spawned < 2) {
+        if (spawned < 7) {
             do {
                 set_choice = rand() % 5;
             } while (set_choice == previous_choice);
@@ -381,43 +381,66 @@ void over_borderline(Hero& hero, sf::RenderWindow& window, bool& end) {
 }
 
 void fight(Hero& hero, std::vector<Set>& sets, bool& end) {
-    if (!end) {
-        for (auto& set : sets) {
-            for (auto it = set.enemies.begin(); it != set.enemies.end();) {
-                if (hero.getGlobalBounds().intersects(it->getGlobalBounds())) {
-                    if (hero.get_attitude() == State::passive) {
-                        hero.rotate(-90);
+    if (end) return;
 
-                        end = true;
-                        break;
-                    }
-                    else if (hero.get_attitude() == State::attacking) {
-                        it = set.enemies.erase(it);
-                        continue;
-                    }
+    for (auto& set : sets) {
+        for (auto enemy_it = set.enemies.begin(); enemy_it != set.enemies.end();) {
+            auto& enemy = *enemy_it;
+            bool enemy_erased = false;
+
+            // Sprawdzenie kolizji miêdzy strza³ami bohatera a wrogiem
+            for (auto arrow_it = hero.arrows.begin(); arrow_it != hero.arrows.end();) {
+                if (enemy.getGlobalBounds().intersects((*arrow_it)->getGlobalBounds())) {
+                    delete* arrow_it;
+                    arrow_it = hero.arrows.erase(arrow_it);
+                    enemy_it = set.enemies.erase(enemy_it);
+                    enemy_erased = true;
+                    break;
                 }
-
-                it++;
+                else {
+                    ++arrow_it;
+                }
             }
-            //arrows collision
-            for (auto& enemy : set.enemies) {
-                for (auto it = enemy.arrows.begin(); it != enemy.arrows.end();) {
-                    if (hero.getGlobalBounds().intersects((*it)->getGlobalBounds())) {
-                        hero.rotate(-90);
 
-                        delete* it;
-                        it = enemy.arrows.erase(it);
-                        end = true;
-                        break;
+            if (enemy_erased) continue;
+
+            // Sprawdzenie kolizji miêdzy bohaterem a wrogiem
+            if (hero.getGlobalBounds().intersects(enemy.getGlobalBounds())) {
+                if (hero.get_attitude() == State::passive) {
+                    hero.rotate(-90);
+                    end = true;
+                    return;
+                }
+                else if (hero.get_attitude() == State::attacking) {
+                    enemy_it = set.enemies.erase(enemy_it);
+                    continue;
+                }
+            }
+
+            ++enemy_it;
+        }
+
+        // Sprawdzenie kolizji miêdzy strza³ami wrogów a bohaterem
+        for (auto& enemy : set.enemies) {
+            for (auto arrow_it = enemy.arrows.begin(); arrow_it != enemy.arrows.end();) {
+                if (hero.getGlobalBounds().intersects((*arrow_it)->getGlobalBounds())) {
+                    if (hero.get_attitude() == State::attacking) {
+                        hero.eq++;
                     }
                     else {
-                        it++;
+                        hero.rotate(-90);
+                        end = true;
                     }
+                    delete* arrow_it;
+                    arrow_it = enemy.arrows.erase(arrow_it);
+                    break;
+                }
+                else {
+                    ++arrow_it;
                 }
             }
         }
     }
-    
 }
 
 
@@ -446,15 +469,15 @@ sf::Text string_text(sf::Font& font, std::string name) {
     return text;
 }
 
-sf::Text arrow_amount(sf::Font& font) {
+sf::Text arrow_amount(Hero& hero, sf::Font& font) {
     sf::Text text;
     std::stringstream string_arrows;
-    //string_arrows << " x" << hero.get_arrows_size();
+    string_arrows << "x" << hero.eq;
 
     text.setFont(font);
     text.setString(string_arrows.str());
     text.setCharacterSize(30.f);
-    text.setPosition(sf::Vector2f(0.01 * WIDTH, 0.01 * HEIGHT));
+    text.setPosition(sf::Vector2f(0.9 * WIDTH, 0.05 * HEIGHT));
 
     return text;
 }
@@ -469,8 +492,9 @@ int main() {
     sf::Time progress_time;
     sf::Font font;
     font.loadFromFile("resources/PixelEmulator-xq08.ttf");
-    sf::Text text;
+    //sf::Text text;
     sf::Text score;
+    sf::Text aa_text;
     sf::Texture arrow_texture;
     arrow_texture.loadFromFile("resources/arrow.png");
 
@@ -492,7 +516,7 @@ int main() {
     Hero hero = create_hero();
 
     //create info object
-    GraphicalObject arrow(arrow_texture, sf::Vector2f(0.9*WIDTH, 0.05*HEIGHT));
+    GraphicalObject arrow(arrow_texture, sf::Vector2f(0.85*WIDTH, 0.05*HEIGHT));
     arrow.setScale(2, 2);
     arrow.rotate(45);
 
@@ -501,6 +525,7 @@ int main() {
         // restart the clock to get elapsed time since the last restart
         sf::Time elapsed_time = clock.restart();
         score = load_score(hero, font);
+        aa_text = arrow_amount(hero, font);
         //polling
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -529,7 +554,7 @@ int main() {
             hero.movement(elapsed_time);
             hero.update(elapsed_time, sets);
             hero.gain_score(game_time);
-
+            
             fight(hero, sets, end);
 
         }
@@ -554,6 +579,10 @@ int main() {
         }
 
         window.draw(hero);
+        hero.render_arrows(window);
+
+
+
 
         if (pause) {
             window.draw(sf::Text(string_text(font, "PAUSE")));
@@ -569,6 +598,7 @@ int main() {
         }
        
         window.draw(score);
+        window.draw(aa_text);
         window.draw(arrow);
         window.display();
     }

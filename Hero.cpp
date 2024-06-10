@@ -8,8 +8,6 @@ Hero::Hero(sf::Texture t, sf::Vector2f p, int af): AnimatedObject(t,p,af){
     score = 0;
     collected = 0;
     multiplier = 1;
-
-    attack_texture.loadFromFile("resources/character_attack.png");
 }
 
 Hero::~Hero() {
@@ -127,24 +125,75 @@ void Hero::attack(sf::Time &elapsed_time) {
     }
 }
 
+void Hero::shooting(sf::Time& elapsed_time) {
+    this->attack_time += elapsed_time;
 
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right) &&
+        attitude == State::passive &&
+        attack_time.asSeconds() >= 0.5 && eq>0) {
+
+        eq--;
+        setTextureRect(sf::IntRect(480, 0, 30, 37));
+        std::cout << "you are shooting\n";
+        this->attitude = State::shooting;
+        this->attack_time = sf::Time::Zero;
+
+        //-------------
+
+        sf::Texture arrow_texture;
+        arrow_texture.loadFromFile("resources/arrow.png");
+        sf::Vector2f arrow_position;
+        arrow_position.x = this->getPosition().x + 50.0;
+        arrow_position.y = this->getPosition().y +45.0;
+
+        auto arrow = new Arrow(arrow_texture, arrow_position);
+        arrow->setScale(1.2, 1.2);
+        arrow->rotate(180);
+
+        arrows.push_back(arrow);
+    }
+}
+
+void Hero::render_arrows(sf::RenderWindow& window) {
+    for (const auto& arrow : arrows) {
+        window.draw(*arrow);
+    }
+}
+
+void Hero::clear_arrows() {
+    for (auto it = arrows.begin(); it != arrows.end();) {
+        if ((*it)->getPosition().x + (*it)->getGlobalBounds().width < 0) {
+            delete* it;
+            it = arrows.erase(it);
+        }
+        else {
+            it++;
+        }
+    }
+}
 
 //udpate method
 void Hero::update(sf::Time& elapsed_time, std::vector<Set>& sets) {
 
-    if (attack_time.asSeconds() >= 0.5 && attitude == State::attacking) {
+    if (attack_time.asSeconds() >= 0.5 && (attitude == State::attacking || attitude == State::shooting)) {
         std::cout << "you are passive\n";
         this->attitude = State::passive;
-        setTexture(texture);
     }
     if (attitude == State::passive) {
         this->animate(elapsed_time);
     }
     this->collision(sets);
+    
+    for (auto& arrow : arrows) {
+        arrow->move(400.0 * elapsed_time.asSeconds(), 0.0);
+    }
+
+
     this->attack(elapsed_time);
-
+    this->shooting(elapsed_time);
+    this->clear_arrows();
 }
-
+//info methods
 State Hero::get_attitude(){
     return attitude;
 }
