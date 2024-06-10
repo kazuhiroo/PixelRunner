@@ -54,5 +54,4 @@ void Enemy::update(sf::Time &elapsed_time, float &o_velocity) {
 	}
 	this->clear_arrows();
 	this->shooting(elapsed_time);
-	this->move(o_velocity * elapsed_time.asSeconds(), 0.0);
 }

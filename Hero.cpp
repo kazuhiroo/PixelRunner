@@ -194,7 +194,6 @@ void Hero::update(sf::Time& elapsed_time, std::vector<Set>& sets) {
     this->clear_arrows();
 }
 
-
 void Hero::reset() {
     this->state = State::stable;
     this->attitude = State::passive;
@@ -212,8 +211,6 @@ void Hero::reset() {
     this->back_velocity = -300.0;
     this->state_velocity = 50;
 }
-
-
 
 //info methods
 State Hero::get_attitude(){

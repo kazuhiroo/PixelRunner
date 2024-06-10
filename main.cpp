@@ -348,13 +348,13 @@ void set_init(std::vector<Set>& sets) {
     }
 }
 
-void set_update(sf::Time& elapsed_time, sf::Time progress_time, std::vector<Set>& sets, Hero &hero, float &velocity_multiplier) {
+void set_update(sf::Time& elapsed_time, sf::Time &progress_time, std::vector<Set>& sets, Hero &hero, float &velocity_progress) {
     progress_time += elapsed_time;
 
 
     if (progress_time.asSeconds() >= 10.0) {
         progress_time = sf::Time::Zero;
-        velocity_multiplier += 0.1;
+        velocity_progress -= 1.0;
     }
     set_init(sets);
     
@@ -362,16 +362,17 @@ void set_update(sf::Time& elapsed_time, sf::Time progress_time, std::vector<Set>
 
 
     for (auto& set : sets) {
-        float o_velocity = set.objects_velocity * velocity_multiplier;
+        float o_velocity = set.objects_velocity + velocity_progress;
 
         for (auto& platform : set.platforms) {
-            platform.move(set.objects_velocity * velocity_multiplier * elapsed_time.asSeconds(), 0.0);
+            platform.move(o_velocity * elapsed_time.asSeconds(), 0.0);
         }
         for (auto& enemy : set.enemies) {
             enemy.update(elapsed_time, o_velocity);
+            enemy.move(o_velocity * elapsed_time.asSeconds(), 0.0);
         }
         for (auto it = set.bonuses.begin(); it != set.bonuses.end();) {
-            (*it)->move(set.objects_velocity * velocity_multiplier * elapsed_time.asSeconds(), 0.0);
+            (*it)->move(o_velocity * elapsed_time.asSeconds(), 0.0);
             if ((*it)->interaction(hero)) {
                 delete* it;
                 it = set.bonuses.erase(it);
@@ -391,6 +392,7 @@ void over_borderline(Hero& hero, sf::RenderWindow& window, bool& end) {
         end = true;
     }
 }
+
 void fight(Hero& hero, std::vector<Set>& sets, bool& end) {
     if (end) return;
 
@@ -546,7 +548,7 @@ int main() {
     srand(static_cast<unsigned int>(time(0)));
     bool end = false;
     bool pause = false;
-    float velocity_multiplier = 1;
+    float velocity_progress = 0;
     sf::Clock clock;
     sf::Time game_time = clock.restart();
     sf::Time end_time = clock.restart();
@@ -607,7 +609,7 @@ int main() {
                     end = false; // reset end state
                     progress_time = sf::Time::Zero; // reset progress time
                     end_time = sf::Time::Zero;
-                    velocity_multiplier = 1; // reset velocity multiplier
+                    velocity_progress = 0; // reset velocity multiplier
                 }
                 if (game_state == menu && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
                     window.close();
@@ -619,7 +621,7 @@ int main() {
         if (game_state == game_on) {
             if (!pause) {
                 // Platform methods
-                set_update(elapsed_time, progress_time, sets, hero, velocity_multiplier);
+                set_update(elapsed_time, progress_time, sets, hero, velocity_progress);
                 spawn_set(sets);
                 clear_set(sets);
 
