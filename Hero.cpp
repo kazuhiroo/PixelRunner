@@ -118,7 +118,7 @@ void Hero::attack(sf::Time &elapsed_time) {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && 
         attitude == State::passive &&
         attack_time.asSeconds() >= 0.5) {
-        setTextureRect(sf::IntRect(450, 0, 30, 37));
+        setTextureRect(sf::IntRect(445, 0, 30, 37));
         std::cout << "you are attacking\n";
         this->attitude = State::attacking;
         this->attack_time = sf::Time::Zero;
@@ -175,7 +175,7 @@ void Hero::clear_arrows() {
 //udpate method
 void Hero::update(sf::Time& elapsed_time, std::vector<Set>& sets) {
 
-    if (attack_time.asSeconds() >= 0.5 && (attitude == State::attacking || attitude == State::shooting)) {
+    if (attack_time.asSeconds() >= 0.8 && (attitude == State::attacking || attitude == State::shooting)) {
         std::cout << "you are passive\n";
         this->attitude = State::passive;
     }
@@ -196,13 +196,21 @@ void Hero::update(sf::Time& elapsed_time, std::vector<Set>& sets) {
 
 
 void Hero::reset() {
-    // Reset hero's state, position, score, etc.
-    this->setPosition(sf::Vector2f(200.0, 200.0));
+    this->state = State::stable;
+    this->attitude = State::passive;
+    this->position = sf::Vector2f(220.0, 150.0);
+    this->setPosition(position);
     this->score = 0;
     this->collected = 0;
     this->eq = 3;
     this->multiplier = 1;
     this->setRotation(0);
+
+    this->jump_height = 115.0;
+    this->horizontal_velocity = 600.0;
+    this->forward_velocity = 200.0;
+    this->back_velocity = -300.0;
+    this->state_velocity = 50;
 }
 
 

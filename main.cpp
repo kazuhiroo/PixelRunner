@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
+#include <fstream>
 #include <sstream>
 #include <cstdlib>
 #include <iostream>
@@ -20,54 +21,13 @@ enum GameMode {
     game_over
 };
 
-
-sf::Text createMenuText(sf::Font& font, const std::string& text, float x, float y) {
-    sf::Text menuText;
-    menuText.setFont(font);
-    menuText.setString(text);
-    menuText.setCharacterSize(50);
-    menuText.setOrigin(menuText.getGlobalBounds().width / 2, menuText.getGlobalBounds().height / 2);
-    menuText.setPosition(x, y);
-    return menuText;
-}
-
-void showMenu(sf::RenderWindow& window, sf::Font& font, GameMode& gameState) {
-    sf::Text title = createMenuText(font, "PixelRunner", WIDTH / 2, HEIGHT / 2 - 100);
-    sf::Text playOption = createMenuText(font, "Press Enter to Play", WIDTH / 2, HEIGHT / 2);
-    sf::Text exitOption = createMenuText(font, "Press Esc to Exit", WIDTH / 2, HEIGHT / 2 + 100);
-
-    window.clear();
-    window.draw(title);
-    window.draw(playOption);
-    window.draw(exitOption);
-    window.display();
-
-    sf::Event event;
-    while (window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
-            window.close();
-        }
-        if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Enter) {
-                gameState = game_on;
-                return;
-            }
-            if (event.key.code == sf::Keyboard::Escape) {
-                window.close();
-            }
-        }
-    }
-}
-
-
-
 //creating basic game objects
 Hero create_hero() {
 
     sf::Texture hero_texture;
     hero_texture.loadFromFile("resources/character2.png");
 
-    Hero hero(hero_texture, sf::Vector2f(200.0, 200.0), 9);
+    Hero hero(hero_texture, sf::Vector2f(220.0, 150.0), 9);
     hero.setScale(2, 2);
 
     hero.add_animation_frame(sf::IntRect(205, 0, 30, 37)); // 1 frame of animation
@@ -121,7 +81,7 @@ Set create_set_1() {
     sf::Texture platform_texture;
     sf::Texture coin_texture;
     sf::Texture star_texture;
-    sf::Vector2f enemy_position(WIDTH+650,330.0-70);
+    sf::Vector2f enemy_position(WIDTH+650,330.0-65);
     sf::Texture enemy_texture;
 
     enemy_texture.loadFromFile("resources/enemy1.png");
@@ -183,7 +143,7 @@ Set create_set_3() {
     sf::Texture long_platform_texture;
     sf::Texture coin_texture;
     sf::Texture star_texture;
-    sf::Vector2f enemy_position(WIDTH + 100, 600.0-70);
+    sf::Vector2f enemy_position(WIDTH + 100, 600.0 - 65);
     sf::Texture enemy_texture;
 
     enemy_texture.loadFromFile("resources/enemy1.png");
@@ -233,7 +193,7 @@ Set create_set_4() {
     star_texture.loadFromFile("resources/star.png");
 
     for (int i = 0; i < 3; i++) {
-        sf::Vector2f enemy_position(WIDTH+350 +i*200, 500-70-i*100);
+        sf::Vector2f enemy_position(WIDTH+350 +i*200, 500-65 -i*100);
         Enemy enemy = create_enemy(enemy_position, enemy_texture);
         set.add_enemy(enemy,enemy_texture);
     }
@@ -267,13 +227,18 @@ Set create_set_5() {
     sf::Texture medium_platform_texture;
     sf::Texture small_platform_texture;
     sf::Texture coin_texture;
+    sf::Texture enemy_texture;
 
-
+    enemy_texture.loadFromFile("resources/enemy1.png");
     platform_texture.loadFromFile("resources/platform.png");
     small_platform_texture.loadFromFile("resources/small_platform.png");
     medium_platform_texture.loadFromFile("resources/medium_platform.png");
     coin_texture.loadFromFile("resources/coin.png");
    
+    sf::Vector2f enemy_position(WIDTH + 100, 550.0 - 65);
+
+    Enemy enemy = create_enemy(enemy_position, enemy_texture);
+
     Bonus* coin = new Coin(coin_texture, sf::Vector2f(WIDTH + 227, 410));
     set.add_bonus(coin);
 
@@ -383,10 +348,8 @@ void set_init(std::vector<Set>& sets) {
     }
 }
 
-void set_update(sf::Time& elapsed_time, sf::Time progress_time, std::vector<Set>& sets, Hero &hero) {
+void set_update(sf::Time& elapsed_time, sf::Time progress_time, std::vector<Set>& sets, Hero &hero, float &velocity_multiplier) {
     progress_time += elapsed_time;
-    static int velocity_multiplier = 1;
-
 
 
     if (progress_time.asSeconds() >= 10.0) {
@@ -428,7 +391,6 @@ void over_borderline(Hero& hero, sf::RenderWindow& window, bool& end) {
         end = true;
     }
 }
-
 void fight(Hero& hero, std::vector<Set>& sets, bool& end) {
     if (end) return;
 
@@ -505,14 +467,14 @@ sf::Text load_score(Hero& hero, sf::Font &font) {
     return text;
 }
 
-sf::Text string_text(sf::Font& font, std::string name) {
+sf::Text string_text(sf::Font& font, std::string name, float x, float y, float size) {
     sf::Text text;
 
     text.setFont(font);
     text.setString(name);
-    text.setCharacterSize(100.f);
+    text.setCharacterSize(size);
     text.setOrigin(text.getGlobalBounds().width / 2, text.getGlobalBounds().height / 2);
-    text.setPosition(sf::Vector2f(WIDTH / 2, HEIGHT / 2));
+    text.setPosition(sf::Vector2f(x,y));
 
     return text;
 }
@@ -529,14 +491,65 @@ sf::Text arrow_amount(Hero& hero, sf::Font& font) {
 
     return text;
 }
+
+//menu
+void show_menu(sf::RenderWindow& window, sf::Font& font, GameMode& gameState, std::string best, std::string last) {
+    sf::Text title = string_text(font, "PixelRunner", WIDTH*0.4, HEIGHT*0.3, 100);
+    sf::Text play_option = string_text(font, "Press Space or W to Play", WIDTH * 0.4- 40, HEIGHT*0.3+ 100.0, 40);
+    sf::Text exit_option = string_text(font, "Press Esc to Exit", WIDTH * 0.4- 150, HEIGHT*0.3 + 150.0, 40);
+    sf::Text best_text = string_text(font, "Best Run: " + best, WIDTH * 0.5, HEIGHT * 0.3 + 250.0, 40);
+    sf::Text last_text = string_text(font, "Last Run: " + last, WIDTH * 0.5, HEIGHT * 0.3 + 300.0, 40);
+
+    
+    window.draw(title);
+    window.draw(play_option);
+    window.draw(exit_option);
+    window.draw(best_text);
+    window.draw(last_text);
+}
+
+void save_run(int score, const std::string& filename) {
+    std::ofstream file(filename);
+    if (file.is_open()) {
+        file << score;
+        file.close();
+    }
+    else {
+        std::cerr << "Error opening file for writing: " << filename << "\n";
+    }
+}
+
+std::string load_run(const std::string& filename) {
+    std::ifstream file(filename);
+    std::string run;
+    if (file.is_open()) {
+        std::getline(file, run);
+        file.close();
+    }
+    else {
+        std::cerr << "Error opening file for reading: " << filename << "\n";
+    }
+    return run;
+}
+
+std::string load_best_run() {
+    return load_run("bestrun.txt");
+}
+
+std::string load_last_run() {
+    return load_run("lastrun.txt");
+}
+
 //main
 int main() {
     // Game variables
     srand(static_cast<unsigned int>(time(0)));
     bool end = false;
     bool pause = false;
+    float velocity_multiplier = 1;
     sf::Clock clock;
     sf::Time game_time = clock.restart();
+    sf::Time end_time = clock.restart();
     sf::Time progress_time;
     sf::Font font;
     font.loadFromFile("resources/PixelEmulator-xq08.ttf");
@@ -545,6 +558,9 @@ int main() {
     sf::Text aa_text;
     sf::Texture arrow_texture;
     arrow_texture.loadFromFile("resources/arrow.png");
+
+    std::string string_best_run = load_best_run();
+    std::string string_last_run = load_last_run();
 
     // Create the window
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "PixelRunner");
@@ -563,40 +579,50 @@ int main() {
 
     // Create info object
     GraphicalObject arrow(arrow_texture, sf::Vector2f(0.85 * WIDTH, 0.05 * HEIGHT));
-    arrow.setScale(2, 2);
+    arrow.setScale(2.5, 2.5);
     arrow.rotate(45);
 
     // Game state
-    GameMode gameState = menu;
+    GameMode game_state = menu;
 
     // Game loop
     while (window.isOpen()) {
         sf::Time elapsed_time = clock.restart();
         score = load_score(hero, font);
         aa_text = arrow_amount(hero, font);
+        over_borderline(hero, window, end);
 
-        if (gameState == menu) {
-            showMenu(window, font, gameState);
-        }
-        else if (gameState == game_on) {
-            sf::Event event;
-            while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed) {
+
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+            if (event.type == sf::Event::KeyPressed) {
+                if (game_state == game_on && sf::Keyboard::isKeyPressed(sf::Keyboard::Tab)) {
+                    pause = !pause;
+                }
+                if (game_state == menu && (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))) {
+                    game_state = game_on;
+                    end = false; // reset end state
+                    hero.reset(); // reset hero to initial state
+                    sets.clear(); // clear existing sets
+                    sets.emplace_back(create_starting_set()); // create initial set
+                    progress_time = sf::Time::Zero; // reset progress time
+                    end_time = sf::Time::Zero;
+                    velocity_multiplier = 1; // reset velocity multiplier
+                }
+                if (game_state == menu && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
                     window.close();
                 }
-
-                if (event.type == sf::Event::KeyPressed) {
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-                        pause = !pause;
-                    }
-                }
             }
+        }
 
+
+        if (game_state == game_on) {
             if (!pause) {
-                over_borderline(hero, window, end);
-
                 // Platform methods
-                set_update(elapsed_time, progress_time, sets, hero);
+                set_update(elapsed_time, progress_time, sets, hero, velocity_multiplier);
                 spawn_set(sets);
                 clear_set(sets);
 
@@ -624,35 +650,58 @@ int main() {
                 }
             }
 
-            window.draw(hero);
+
+            //render in game
             hero.render_arrows(window);
-
-            if (pause) {
-                window.draw(string_text(font, "PAUSE"));
-            }
-            else if (end) {
-                hero.lost();
-                static sf::Time end_time;
-                end_time += elapsed_time;
-                window.draw(string_text(font, "GAME OVER"));
-                if (end_time.asSeconds() >= 2) {
-                    gameState = menu;
-                    end_time = sf::Time::Zero;
-                    hero.reset(); // Reset hero and game state
-                    sets.clear();
-                    sets.emplace_back(create_starting_set());
-                    end = false;
-                }
-            }
-
             window.draw(score);
             window.draw(aa_text);
             window.draw(arrow);
+            window.draw(hero);
+
+            if (pause) {
+                window.draw(string_text(font, "PAUSE", WIDTH / 2, HEIGHT / 2, 100));
+            }
+            if (end) {
+                hero.lost();
+                end_time += elapsed_time;
+                window.draw(string_text(font, "GAME OVER", WIDTH / 2, HEIGHT / 2, 100));
+                if (end_time.asSeconds() >= 2) {
+                    end = false;
+                    game_state = menu;
+                    // saving score
+                    int current_run = hero.score;
+                    int best_run = std::stoi(load_best_run());
+
+                    save_run(current_run, "lastrun.txt");
+
+                    if (current_run > best_run) {
+                        save_run(current_run, "bestrun.txt");
+                    }
+
+                    string_best_run = load_best_run();
+                    string_last_run = load_last_run();
+
+                    // resetting
+                    hero.reset();
+                    sets.clear();
+                    sets.emplace_back(create_starting_set());
+                    std::cout << "SCORE:\n" << hero.score << "\nCOINS COLLECTED:\n" << hero.collected;
+                }
+                
+            }
+
+            window.display();
+        }
+        else if (game_state == menu && !end) {
+            hero.animate(elapsed_time);
+            window.clear();
+            window.draw(sky);
+            window.draw(hero);
+            show_menu(window, font, game_state, string_best_run, string_last_run);
             window.display();
         }
     }
 
-    std::cout << "SCORE:\n" << hero.score << "\nCOINS COLLECTED:\n" << hero.collected;
-
+    
     return 0;
 }

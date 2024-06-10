@@ -50,7 +50,6 @@ private:
 
 	//movement variables
 	float jump_velocity = 0;
-
 	float jump_height = 115.0;
 	float horizontal_velocity = 600.0;
 	float forward_velocity = 200.0;

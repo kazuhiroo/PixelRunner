@@ -12,7 +12,7 @@ AnimatedObject::~AnimatedObject() {
 //animation methods
 void AnimatedObject::add_animation_frame(sf::IntRect frame) {
 	frames.emplace_back(frame);
-	std::cout << "added_anim_frame\n";
+	//std::cout << "added_anim_frame\n";
 }
 void AnimatedObject::animate(sf::Time& time_elapsed) {
     object_time += time_elapsed;
