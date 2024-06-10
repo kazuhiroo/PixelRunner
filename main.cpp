@@ -605,9 +605,6 @@ int main() {
                 if (game_state == menu && (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))) {
                     game_state = game_on;
                     end = false; // reset end state
-                    hero.reset(); // reset hero to initial state
-                    sets.clear(); // clear existing sets
-                    sets.emplace_back(create_starting_set()); // create initial set
                     progress_time = sf::Time::Zero; // reset progress time
                     end_time = sf::Time::Zero;
                     velocity_multiplier = 1; // reset velocity multiplier
@@ -629,8 +626,9 @@ int main() {
                 // Hero methods
                 hero.movement(elapsed_time);
                 hero.update(elapsed_time, sets);
-                hero.gain_score(game_time);
-
+                if (!end) {
+                    hero.gain_score(game_time);
+                }
                 fight(hero, sets, end);
             }
 
@@ -649,6 +647,8 @@ int main() {
                     enemy.render_arrows(window);
                 }
             }
+
+
 
 
             //render in game
