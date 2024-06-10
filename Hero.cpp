@@ -193,6 +193,20 @@ void Hero::update(sf::Time& elapsed_time, std::vector<Set>& sets) {
     this->shooting(elapsed_time);
     this->clear_arrows();
 }
+
+
+void Hero::reset() {
+    // Reset hero's state, position, score, etc.
+    this->setPosition(sf::Vector2f(200.0, 200.0));
+    this->score = 0;
+    this->collected = 0;
+    this->eq = 3;
+    this->multiplier = 1;
+    this->setRotation(0);
+}
+
+
+
 //info methods
 State Hero::get_attitude(){
     return attitude;

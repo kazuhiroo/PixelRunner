@@ -13,6 +13,54 @@
 #define LIMIT 1200
 #define HALF 0.5, 0.5
 
+
+enum GameMode {
+    menu,
+    game_on,
+    game_over
+};
+
+
+sf::Text createMenuText(sf::Font& font, const std::string& text, float x, float y) {
+    sf::Text menuText;
+    menuText.setFont(font);
+    menuText.setString(text);
+    menuText.setCharacterSize(50);
+    menuText.setOrigin(menuText.getGlobalBounds().width / 2, menuText.getGlobalBounds().height / 2);
+    menuText.setPosition(x, y);
+    return menuText;
+}
+
+void showMenu(sf::RenderWindow& window, sf::Font& font, GameMode& gameState) {
+    sf::Text title = createMenuText(font, "PixelRunner", WIDTH / 2, HEIGHT / 2 - 100);
+    sf::Text playOption = createMenuText(font, "Press Enter to Play", WIDTH / 2, HEIGHT / 2);
+    sf::Text exitOption = createMenuText(font, "Press Esc to Exit", WIDTH / 2, HEIGHT / 2 + 100);
+
+    window.clear();
+    window.draw(title);
+    window.draw(playOption);
+    window.draw(exitOption);
+    window.display();
+
+    sf::Event event;
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            window.close();
+        }
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Enter) {
+                gameState = game_on;
+                return;
+            }
+            if (event.key.code == sf::Keyboard::Escape) {
+                window.close();
+            }
+        }
+    }
+}
+
+
+
 //creating basic game objects
 Hero create_hero() {
 
@@ -32,13 +80,14 @@ Hero create_hero() {
 
 Enemy create_enemy(const sf::Vector2f &position, sf::Texture &enemy_texture) {
    
-    Enemy enemy(enemy_texture, position, 5);
+    Enemy enemy(enemy_texture, position, 2);
     enemy.setScale(2, 2);
 
-    enemy.add_animation_frame(sf::IntRect(213, 0, 23, 37)); // 1 frame of animation
-    enemy.add_animation_frame(sf::IntRect(263, 0, 23, 37)); // 2 frame
-    enemy.add_animation_frame(sf::IntRect(313, 0, 23, 37)); // 3 frame
-    enemy.add_animation_frame(sf::IntRect(363, 0, 23, 37)); // 4 frame
+    enemy.add_animation_frame(sf::IntRect(5, 0, 26, 34)); // 1 frame of animation
+    enemy.add_animation_frame(sf::IntRect(55, 0, 26, 34)); // 2 frame
+    enemy.add_animation_frame(sf::IntRect(105, 0, 26, 34)); // 3 frame
+    enemy.add_animation_frame(sf::IntRect(157, 0, 26, 34)); // 4 frame
+
 
     return enemy;
 }
@@ -443,7 +492,6 @@ void fight(Hero& hero, std::vector<Set>& sets, bool& end) {
     }
 }
 
-
 sf::Text load_score(Hero& hero, sf::Font &font) {
     sf::Text text;
     std::stringstream string_score;
@@ -483,7 +531,7 @@ sf::Text arrow_amount(Hero& hero, sf::Font& font) {
 }
 //main
 int main() {
-    //game variables
+    // Game variables
     srand(static_cast<unsigned int>(time(0)));
     bool end = false;
     bool pause = false;
@@ -492,113 +540,116 @@ int main() {
     sf::Time progress_time;
     sf::Font font;
     font.loadFromFile("resources/PixelEmulator-xq08.ttf");
-    //sf::Text text;
+
     sf::Text score;
     sf::Text aa_text;
     sf::Texture arrow_texture;
     arrow_texture.loadFromFile("resources/arrow.png");
 
-
-    //create the window
+    // Create the window
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "PixelRunner");
     window.setFramerateLimit(60);
 
-    //create sky object
+    // Create sky object
     GraphicalObject sky = create_sky();
 
-    //create sets objects
+    // Create sets objects
     std::vector<Set> sets;
     Set starting_set = create_starting_set();
     sets.emplace_back(starting_set);
 
-
-    //create hero
+    // Create hero
     Hero hero = create_hero();
 
-    //create info object
-    GraphicalObject arrow(arrow_texture, sf::Vector2f(0.85*WIDTH, 0.05*HEIGHT));
+    // Create info object
+    GraphicalObject arrow(arrow_texture, sf::Vector2f(0.85 * WIDTH, 0.05 * HEIGHT));
     arrow.setScale(2, 2);
     arrow.rotate(45);
 
-    //game loop
+    // Game state
+    GameMode gameState = menu;
+
+    // Game loop
     while (window.isOpen()) {
-        // restart the clock to get elapsed time since the last restart
         sf::Time elapsed_time = clock.restart();
         score = load_score(hero, font);
         aa_text = arrow_amount(hero, font);
-        //polling
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
 
-            if (event.type == sf::Event::KeyPressed) {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-                    pause = !pause;
+        if (gameState == menu) {
+            showMenu(window, font, gameState);
+        }
+        else if (gameState == game_on) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window.close();
+                }
+
+                if (event.type == sf::Event::KeyPressed) {
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+                        pause = !pause;
+                    }
                 }
             }
-        }
 
+            if (!pause) {
+                over_borderline(hero, window, end);
 
-        if (!pause) {
-            over_borderline(hero, window, end);
-            
-            //platform methods
-            set_update(elapsed_time, progress_time, sets, hero);
+                // Platform methods
+                set_update(elapsed_time, progress_time, sets, hero);
+                spawn_set(sets);
+                clear_set(sets);
 
-            spawn_set(sets);
-            clear_set(sets);
+                // Hero methods
+                hero.movement(elapsed_time);
+                hero.update(elapsed_time, sets);
+                hero.gain_score(game_time);
 
-            //hero methods
-            hero.movement(elapsed_time);
-            hero.update(elapsed_time, sets);
-            hero.gain_score(game_time);
-            
-            fight(hero, sets, end);
-
-        }
-     
-        
-        //render
-        window.clear();
-        window.draw(sky);
-        
-
-        for (auto& set : sets) {
-            for (const auto& platform : set.platforms) {
-                window.draw(platform);
+                fight(hero, sets, end);
             }
-            for (const auto& bonus : set.bonuses) {
-                window.draw(*bonus);
-            }
-            for (auto& enemy : set.enemies) {
-                window.draw(enemy);
-                enemy.render_arrows(window);
-            }
-        }
 
-        window.draw(hero);
-        hero.render_arrows(window);
+            window.clear();
+            window.draw(sky);
 
-
-        if (pause) {
-            window.draw(sf::Text(string_text(font, "PAUSE")));
-        }
-        else if (end) {
-            hero.lost();
-            static sf::Time end_time;
-            end_time += elapsed_time;
-            window.draw(sf::Text(string_text(font, "GAME OVER")));
-            if (end_time.asSeconds() >= 2) {
-                window.close();
+            for (auto& set : sets) {
+                for (const auto& platform : set.platforms) {
+                    window.draw(platform);
+                }
+                for (const auto& bonus : set.bonuses) {
+                    window.draw(*bonus);
+                }
+                for (auto& enemy : set.enemies) {
+                    window.draw(enemy);
+                    enemy.render_arrows(window);
+                }
             }
+
+            window.draw(hero);
+            hero.render_arrows(window);
+
+            if (pause) {
+                window.draw(string_text(font, "PAUSE"));
+            }
+            else if (end) {
+                hero.lost();
+                static sf::Time end_time;
+                end_time += elapsed_time;
+                window.draw(string_text(font, "GAME OVER"));
+                if (end_time.asSeconds() >= 2) {
+                    gameState = menu;
+                    end_time = sf::Time::Zero;
+                    hero.reset(); // Reset hero and game state
+                    sets.clear();
+                    sets.emplace_back(create_starting_set());
+                    end = false;
+                }
+            }
+
+            window.draw(score);
+            window.draw(aa_text);
+            window.draw(arrow);
+            window.display();
         }
-       
-        window.draw(score);
-        window.draw(aa_text);
-        window.draw(arrow);
-        window.display();
     }
 
     std::cout << "SCORE:\n" << hero.score << "\nCOINS COLLECTED:\n" << hero.collected;

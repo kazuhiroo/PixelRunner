@@ -94,5 +94,5 @@ public:
 	State get_attitude();
 	//update
 	void update(sf::Time& elapsed_time, std::vector<Set>& sets);
-
+	void reset();
 };
