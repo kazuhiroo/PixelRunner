@@ -268,11 +268,10 @@ Set create_set_break() {
     return set;
 }
 
-// initializing and updating sets
-void spawn_set(std::vector<Set>& sets) {
+//initializing and updating sets
+void spawn_set(std::vector<Set>& sets, int &spawned) {
     int set_choice;
     static int previous_choice;
-    static int spawned = 0;
     Set& last_set = sets.back();
     Platform& last_platform = last_set.platforms.back();
 
@@ -548,6 +547,7 @@ int main() {
     srand(static_cast<unsigned int>(time(0)));
     bool end = false;
     bool pause = false;
+    int spawned = 0;
     float velocity_progress = 0;
     sf::Clock clock;
     sf::Time game_time = clock.restart();
@@ -610,6 +610,7 @@ int main() {
                     progress_time = sf::Time::Zero; // reset progress time
                     end_time = sf::Time::Zero;
                     velocity_progress = 0; // reset velocity multiplier
+                    spawned = 0;
                 }
                 if (game_state == menu && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
                     window.close();
@@ -622,7 +623,7 @@ int main() {
             if (!pause) {
                 // Platform methods
                 set_update(elapsed_time, progress_time, sets, hero, velocity_progress);
-                spawn_set(sets);
+                spawn_set(sets, spawned);
                 clear_set(sets);
 
                 // Hero methods
@@ -684,10 +685,11 @@ int main() {
                     string_last_run = load_last_run();
 
                     // resetting
+                    std::cout << "SCORE:\n" << hero.score << "\nCOINS COLLECTED:\n" << hero.collected;
                     hero.reset();
                     sets.clear();
                     sets.emplace_back(create_starting_set());
-                    std::cout << "SCORE:\n" << hero.score << "\nCOINS COLLECTED:\n" << hero.collected;
+                    sf::sleep(sf::seconds(1));
                 }
                 
             }
